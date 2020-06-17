@@ -1,15 +1,15 @@
-import { PointTypes } from './Point-Types';
+import { CellTypes } from './Cell-Types';
 
-export class Point {
+export class Cell {
     X: number;
     Y: number;
-    Type: PointTypes;
+    Type: CellTypes;
     Colour: string;
 
     constructor(x: number, y: number) {
         this.X = x;
         this.Y = y;
-        this.Type = PointTypes.Defender;
+        this.Type = CellTypes.BattleGround;
         this.Colour = '';
     }
 }

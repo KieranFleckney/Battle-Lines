@@ -1,31 +1,29 @@
 import { IRenderer } from './IRenderer';
-import { Point } from './Point';
-import { PointTypes } from './Point-Types';
-import { IsOdd } from './Utilities';
+import { Cell } from '../Grid/Cell';
+import { CellTypes } from '../Grid/Cell-Types';
+import { IsOdd, SeedRand } from '../Utilities';
 
 export class CanvasRenderer implements IRenderer {
+    Random: SeedRand;
+    Height: number;
+    Width: number;
+    CellSize: number;
+
     Canvas: HTMLCanvasElement;
     ColourOne: string;
     ColourTwo: string;
-    Rows: number;
-    Columns: number;
-    Height: number;
-    Width: number;
-    PointSize: number;
-    BattleFieldSize: number;
-    constructor(canvas: HTMLCanvasElement, colourOne: string, colourTwo: string) {
-        this.Canvas = canvas;
-        this.ColourOne = colourOne;
-        this.ColourTwo = colourTwo;
-        this.Rows = 0;
-        this.Columns = 0;
-        this.Height = 0;
-        this.Width = 0;
-        this.PointSize = 0;
-        this.BattleFieldSize = 0;
+    constructor(config: any) {
+        this.Random = config.Random;
+        this.Height = config.Height;
+        this.Width = config.Width;
+        this.CellSize = config.CellSize;
+
+        this.Canvas = config.Canvas;
+        this.ColourOne = config.ColourOne;
+        this.ColourTwo = config.ColourTwo;
     }
 
-    Draw(points: Array<Array<Point>>): void {
+    Draw(points: Array<Array<Cell>>): void {
         this.Canvas.height = this.Height;
         this.Canvas.width = this.Width;
         this.Canvas.style.backgroundColor = this.ColourTwo;
@@ -37,10 +35,9 @@ export class CanvasRenderer implements IRenderer {
                 let currentWidth: number = 0;
 
                 for (let index = 0; index < row.length; index++) {
-                    let point: Point = row[index];
+                    let point: Cell = row[index];
                     switch (point.Type) {
-                        case PointTypes.Attacker:
-                        case PointTypes.Victory:
+                        case CellTypes.Victory:
                             if (IsOdd(point.Y)) {
                                 this.DrawOdd(ctx, currentWidth, currentHeight, row, index);
                             } else {
@@ -50,10 +47,10 @@ export class CanvasRenderer implements IRenderer {
                         default:
                             break;
                     }
-                    currentWidth += this.PointSize;
+                    currentWidth += this.CellSize;
                 }
                 currentWidth = 0;
-                currentHeight += this.PointSize;
+                currentHeight += this.CellSize;
             }
         }
     }
@@ -62,7 +59,7 @@ export class CanvasRenderer implements IRenderer {
         ctx: CanvasRenderingContext2D,
         currentWidth: number,
         currentHeight: number,
-        row: Array<Point>,
+        row: Array<Cell>,
         index: number
     ): void {
         if (
@@ -85,7 +82,7 @@ export class CanvasRenderer implements IRenderer {
         ctx: CanvasRenderingContext2D,
         currentWidth: number,
         currentHeight: number,
-        row: Array<Point>,
+        row: Array<Cell>,
         index: number
     ): void {
         if (
@@ -105,7 +102,7 @@ export class CanvasRenderer implements IRenderer {
     }
 
     private DrawCircle(ctx: CanvasRenderingContext2D, currentWidth: number, currentHeight: number): void {
-        let radius: number = this.PointSize / 2;
+        let radius: number = this.CellSize / 2;
         ctx.beginPath();
         ctx.strokeStyle = this.ColourOne;
         ctx.arc(currentWidth + radius, currentHeight + radius, radius, 0, 2 * Math.PI);
@@ -115,98 +112,82 @@ export class CanvasRenderer implements IRenderer {
     private DrawSquare(ctx: CanvasRenderingContext2D, currentWidth: number, currentHeight: number): void {
         ctx.beginPath();
         ctx.strokeStyle = this.ColourOne;
-        ctx.rect(currentWidth, currentHeight, this.PointSize, this.PointSize);
+        ctx.rect(currentWidth, currentHeight, this.CellSize, this.CellSize);
         ctx.fill();
     }
 
     private DrawLeftOuterCurve(ctx: CanvasRenderingContext2D, currentWidth: number, currentHeight: number): void {
-        let radius: number = this.PointSize / 2;
+        let radius: number = this.CellSize / 2;
         ctx.beginPath();
-        ctx.moveTo(currentWidth + this.PointSize, currentHeight);
+        ctx.moveTo(currentWidth + this.CellSize, currentHeight);
         ctx.lineTo(currentWidth + radius, currentHeight);
         ctx.arc(currentWidth + radius, currentHeight + radius, radius, 1.5 * Math.PI, 0.5 * Math.PI, true);
-        ctx.lineTo(currentWidth + this.PointSize, currentHeight + this.PointSize);
-        ctx.lineTo(currentWidth + this.PointSize, currentHeight);
+        ctx.lineTo(currentWidth + this.CellSize, currentHeight + this.CellSize);
+        ctx.lineTo(currentWidth + this.CellSize, currentHeight);
         ctx.fill();
     }
 
     private DrawRightOuterCurve(ctx: CanvasRenderingContext2D, currentWidth: number, currentHeight: number): void {
-        let radius: number = this.PointSize / 2;
+        let radius: number = this.CellSize / 2;
         ctx.beginPath();
         ctx.moveTo(currentWidth, currentHeight);
         ctx.lineTo(currentWidth + radius, currentHeight);
         ctx.arc(currentWidth + radius, currentHeight + radius, radius, 1.5 * Math.PI, 0.5 * Math.PI, false);
-        ctx.lineTo(currentWidth, currentHeight + this.PointSize);
+        ctx.lineTo(currentWidth, currentHeight + this.CellSize);
         ctx.lineTo(currentWidth, currentHeight);
         ctx.fill();
     }
 
     private DrawInny(ctx: CanvasRenderingContext2D, currentWidth: number, currentHeight: number): void {
-        let radius: number = this.PointSize / 2;
-        let tenth: number = this.PointSize / 10;
+        let radius: number = this.CellSize / 2;
+        let tenth: number = this.CellSize / 10;
         ctx.beginPath();
         ctx.moveTo(currentWidth, currentHeight);
-        ctx.lineTo(currentWidth + this.PointSize, currentHeight);
+        ctx.lineTo(currentWidth + this.CellSize, currentHeight);
         ctx.arc(
-            currentWidth + this.PointSize + tenth,
+            currentWidth + this.CellSize + tenth,
             currentHeight + radius,
             radius,
             1.5 * Math.PI,
             0.5 * Math.PI,
             true
         );
-        ctx.lineTo(currentWidth, currentHeight + this.PointSize);
+        ctx.lineTo(currentWidth, currentHeight + this.CellSize);
         ctx.arc(currentWidth - tenth, currentHeight + radius, radius, 0.5 * Math.PI, 1.5 * Math.PI, true);
         ctx.fill();
     }
 
     private DrawRightInnerCurve(ctx: CanvasRenderingContext2D, currentWidth: number, currentHeight: number): void {
-        let radius: number = this.PointSize / 2;
+        let radius: number = this.CellSize / 2;
         ctx.beginPath();
         ctx.moveTo(currentWidth, currentHeight);
-        ctx.lineTo(currentWidth + this.PointSize, currentHeight);
-        ctx.arc(currentWidth + this.PointSize, currentHeight + radius, radius, 1.5 * Math.PI, 0.5 * Math.PI, true);
-        ctx.lineTo(currentWidth, currentHeight + this.PointSize);
+        ctx.lineTo(currentWidth + this.CellSize, currentHeight);
+        ctx.arc(currentWidth + this.CellSize, currentHeight + radius, radius, 1.5 * Math.PI, 0.5 * Math.PI, true);
+        ctx.lineTo(currentWidth, currentHeight + this.CellSize);
         ctx.lineTo(currentWidth, currentHeight);
         ctx.fill();
     }
 
     private DrawLeftInnerCurve(ctx: CanvasRenderingContext2D, currentWidth: number, currentHeight: number): void {
-        let radius: number = this.PointSize / 2;
+        let radius: number = this.CellSize / 2;
         ctx.beginPath();
         ctx.moveTo(currentWidth, currentHeight);
-        ctx.lineTo(currentWidth + this.PointSize, currentHeight);
-        ctx.lineTo(currentWidth + this.PointSize, currentHeight + this.PointSize);
-        ctx.lineTo(currentWidth, currentHeight + this.PointSize);
+        ctx.lineTo(currentWidth + this.CellSize, currentHeight);
+        ctx.lineTo(currentWidth + this.CellSize, currentHeight + this.CellSize);
+        ctx.lineTo(currentWidth, currentHeight + this.CellSize);
         ctx.arc(currentWidth, currentHeight + radius, radius, 0.5 * Math.PI, 1.5 * Math.PI, true);
         ctx.fill();
     }
 
-    private IsFriendly(point: Point): boolean {
+    private IsFriendly(point: Cell): boolean {
         let answer: boolean = false;
-        if (point.Type === PointTypes.Attacker || point.Type === PointTypes.Victory) answer = true;
+        if (point.Type === CellTypes.Victory) answer = true;
         return answer;
     }
 
-    private IsEnemy(point: Point): boolean {
+    private IsEnemy(point: Cell): boolean {
         let answer: boolean = false;
-        if (point.Type === PointTypes.Defender || point.Type === PointTypes.Defeat) answer = true;
+        if (point.Type === CellTypes.Defeat) answer = true;
         return answer;
-    }
-
-    SetGridParameters(
-        rows: number,
-        columns: number,
-        height: number,
-        width: number,
-        pointSize: number,
-        battleFieldSize: number
-    ): void {
-        this.Rows = rows;
-        this.Columns = columns;
-        this.Height = height;
-        this.Width = width;
-        this.PointSize = pointSize;
-        this.BattleFieldSize = battleFieldSize;
     }
 }

@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>Page Title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script src="./dist/IRLG.min.js"></script>
+        <script src="../dist/IRLG.min.js"></script>
         <style>
             html,
             body {
@@ -17,15 +17,33 @@
     <body>
         <canvas id="canvas"></canvas>
         <script>
-            var t;
+            let t;
             document.addEventListener('DOMContentLoaded', function () {
                 // let config = new IRLG.GridConfig(1000, 1000, 20, 10);
-                let config = new IRLG.GridConfig(window.innerWidth, window.innerHeight, 20, 20);
                 let canvas = document.getElementById('canvas');
                 let renderer = new IRLG.CanvasRenderer(canvas, '#330160', '#df0082');
-                t = new IRLG.New(config, renderer);
+                // setInterval(function () {
+                let config = new IRLG.Config(
+                    window.innerWidth,
+                    window.innerHeight,
+                    20,
+                    IRLG.ClashMode,
+                    {
+                        BattleFieldSize: 20,
+                    },
+                    IRLG.CanvasRenderer,
+                    {
+                        Canvas: canvas,
+                        ColourOne: '#330160',
+                        ColourTwo: '#df0082',
+                    }
+                );
+
+                t = new IRLG.New(config);
                 // var t = new IRLG.New(config);
-                t.Grid.Renderer.Draw(t.Grid.Points);
+                t.Next();
+                t.Draw();
+                // }, 1000);
             });
         </script>
     </body>

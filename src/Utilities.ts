@@ -28,7 +28,7 @@ export function Rand(max?: number, min?: number, negtive: boolean = false, floor
     return newNum;
 }
 
-// http://indiegamr.com/generate-repeatable-random-numbers-in-js/ works as need with out too complicated maths or external libiary
+// http://indiegamr.com/generate-repeatable-random-numbers-in-js/ works as needed with out too complicated maths or external libiary
 export class SeedRand {
     OSeed: number;
     Seed: number;
