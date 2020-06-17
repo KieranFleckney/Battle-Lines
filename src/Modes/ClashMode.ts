@@ -135,69 +135,60 @@ export class ClashMode implements IMode {
     // REVIEW: Maybe I should check for whole possile lenght then rand once, unsure sounds more complicated.
     private BattleEven(grid: Grid): Grid {
         let maxLenght: number = Math.ceil((this.BattleFieldSize / 100) * this.EvenMaxLenghtPercent);
-        // for (const row of grid.Cells) {
-        //     if (IsOdd(row[0].Y)) continue;
-        //     let cells: Array<Cell> = row.filter((cell) => this.IsInBattle(cell.X));
-        //     let aboveRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y + 1);
-        //     let bewlowRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y - 1);
-        //     let pointCount: number = 0;
-
-        //     if (!aboveRow && !bewlowRow) {
-        //         continue;
-        //     }
-
-        //     for (const cell of cells) {
-        //         let cellsToCheck: Array<Cell | undefined> = new Array<Cell>();
-        //         let skip: boolean = false;
-
-        //         // Get list of a few points which must be there for the visuals to work
-        //         cellsToCheck.push(aboveRow?.[cell.X - 1]);
-        //         cellsToCheck.push(aboveRow?.[cell.X]);
-        //         cellsToCheck.push(aboveRow?.[cell.X - 2]);
-        //         cellsToCheck.push(bewlowRow?.[cell.X - 1]);
-        //         cellsToCheck.push(bewlowRow?.[cell.X]);
-        //         cellsToCheck.push(bewlowRow?.[cell.X - 2]);
-
-        //         // check if the list if points are of the correct type
-        //         for (const cellCheck of cellsToCheck) {
-        //             if (cellCheck?.Type !== CellTypes.Victory) {
-        //                 skip = true;
-        //                 break;
-        //             }
-        //         }
-
-        //         if (skip) {
-        //             cell.Type = CellTypes.Defeat;
-        //             continue;
-        //         }
-
-        //         if (pointCount >= maxLenght) {
-        //             pointCount = 0;
-        //             cell.Type = CellTypes.Defeat;
-        //             continue;
-        //         } else {
-        //             this.Random.Max = 1;
-        //             let battleOutcome: number = this.Random.Next();
-        //             if (battleOutcome < this.EvenChancePercent) {
-        //                 cell.Type = CellTypes.Victory;
-        //                 pointCount += 1;
-        //             } else {
-        //                 cell.Type = CellTypes.Defeat;
-        //                 pointCount = 0;
-        //             }
-        //         }
-        //     }
-        // }
-
+        // Had to set self to this, becasue the 'grid.Cells.find' is causing 'this' to be set to undefined
+        let self = this;
         for (const row of grid.Cells) {
-            if (!IsOdd(row[0].Y)) continue;
-            let cells: Array<Cell> = row.filter((cell) => this.IsInBattle(cell.X));
+            if (IsOdd(row[0].Y)) continue;
+            let cells: Array<Cell> = row.filter((cell) => self.IsInBattle(cell.X));
             let aboveRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y + 1);
-            //let bewlowRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y - 1);
-            console.log(maxLenght);
-            console.log(cells);
-            console.log(aboveRow);
-            // console.log(bewlowRow);
+            let bewlowRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y - 1);
+            let pointCount: number = 0;
+
+            if (!aboveRow && !bewlowRow) {
+                continue;
+            }
+
+            for (const cell of cells) {
+                let cellsToCheck: Array<Cell | undefined> = new Array<Cell>();
+                let skip: boolean = false;
+
+                // Get list of a few points which must be there for the visuals to work
+                cellsToCheck.push(aboveRow?.[cell.X - 1]);
+                cellsToCheck.push(aboveRow?.[cell.X]);
+                cellsToCheck.push(aboveRow?.[cell.X - 2]);
+                cellsToCheck.push(bewlowRow?.[cell.X - 1]);
+                cellsToCheck.push(bewlowRow?.[cell.X]);
+                cellsToCheck.push(bewlowRow?.[cell.X - 2]);
+
+                // check if the list if points are of the correct type
+                for (const cellCheck of cellsToCheck) {
+                    if (cellCheck?.Type !== CellTypes.Victory) {
+                        skip = true;
+                        break;
+                    }
+                }
+
+                if (skip) {
+                    cell.Type = CellTypes.Defeat;
+                    continue;
+                }
+
+                if (pointCount >= maxLenght) {
+                    pointCount = 0;
+                    cell.Type = CellTypes.Defeat;
+                    continue;
+                } else {
+                    self.Random.Max = 1;
+                    let battleOutcome: number = self.Random.Next();
+                    if (battleOutcome < self.EvenChancePercent) {
+                        cell.Type = CellTypes.Victory;
+                        pointCount += 1;
+                    } else {
+                        cell.Type = CellTypes.Defeat;
+                        pointCount = 0;
+                    }
+                }
+            }
         }
 
         return grid;

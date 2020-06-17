@@ -22,28 +22,28 @@
                 // let config = new IRLG.GridConfig(1000, 1000, 20, 10);
                 let canvas = document.getElementById('canvas');
                 let renderer = new IRLG.CanvasRenderer(canvas, '#330160', '#df0082');
-                // setInterval(function () {
-                let config = new IRLG.Config(
-                    window.innerWidth,
-                    window.innerHeight,
-                    20,
-                    IRLG.ClashMode,
-                    {
-                        BattleFieldSize: 20,
-                    },
-                    IRLG.CanvasRenderer,
-                    {
-                        Canvas: canvas,
-                        ColourOne: '#330160',
-                        ColourTwo: '#df0082',
-                    }
-                );
+                setInterval(function () {
+                    let config = new IRLG.Config(
+                        window.innerWidth,
+                        window.innerHeight,
+                        20,
+                        IRLG.ClashMode,
+                        {
+                            BattleFieldSize: 20,
+                        },
+                        IRLG.CanvasRenderer,
+                        {
+                            Canvas: canvas,
+                            ColourOne: '#330160',
+                            ColourTwo: '#df0082',
+                        }
+                    );
 
-                t = new IRLG.New(config);
-                // var t = new IRLG.New(config);
-                t.Next();
-                t.Draw();
-                // }, 1000);
+                    t = new IRLG.New(config);
+                    // var t = new IRLG.New(config);
+                    t.Next();
+                    t.Draw();
+                }, 1000);
             });
         </script>
     </body>

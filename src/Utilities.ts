@@ -38,8 +38,8 @@ export class SeedRand {
     constructor(seed?: number, max?: number, min?: number) {
         this.OSeed = seed || Rand(1000000);
         this.Seed = this.OSeed;
-        this.Min = min || 1;
-        this.Max = max || 0;
+        this.Min = min || 0;
+        this.Max = max || 1;
     }
 
     Next() {
