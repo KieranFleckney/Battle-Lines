@@ -9,11 +9,12 @@ export class ClashMode implements IMode {
     Random: SeedRand;
     BattleFieldSize: number;
     BattleField: BattleField;
-    // TODO: Allow to be percent or value <= battlefield
     ColourTwoMaxLenghtPercent: number;
     private ColourTwoMaxLenghtIsPercent: boolean;
     ColourTwoChancePercent: number;
     // TODO: add paramters to colour one not just colour 2
+    ColourOneMaxLenghtPercent: number;
+    private ColourOneMaxLenghtIsPercent: boolean;
 
     constructor(config: any) {
         if (config) {
@@ -26,6 +27,7 @@ export class ClashMode implements IMode {
             this.ColourTwoMaxLenghtPercent = 20;
             this.ColourTwoMaxLenghtIsPercent = true;
 
+            // REVIEW: Calculate the percent here then in BattleEven
             if (config.ColourTwoMaxLenghtPercent) {
                 if (
                     config.ColourTwoMaxLenghtPercent.toString().substr(config.ColourTwoMaxLenghtPercent.length - 1) ===
@@ -65,6 +67,41 @@ export class ClashMode implements IMode {
                     this.ColourTwoChancePercent = config.ColourTwoChancePercent / 100;
                 } else {
                     throw new Error('"ColourTwoChancePercent" must be a number between 0-100');
+                }
+            }
+
+            this.ColourOneMaxLenghtPercent = this.BattleFieldSize;
+            this.ColourOneMaxLenghtIsPercent = false;
+
+            if (config.ColourOneMaxLenghtPercent) {
+                if (
+                    config.ColourOneMaxLenghtPercent.toString().substr(config.ColourOneMaxLenghtPercent.length - 1) ===
+                    '%'
+                ) {
+                    let percent: number = Number(
+                        config.ColourOneMaxLenghtPercent.toString().substr(
+                            0,
+                            config.ColourOneMaxLenghtPercent.length - 1
+                        )
+                    );
+                    if (percent >= 0 && percent <= 100) {
+                        this.ColourOneMaxLenghtPercent = percent;
+                        this.ColourOneMaxLenghtIsPercent = true;
+                    } else {
+                        throw new Error('"ColourOneMaxLenghtPercent" must be a number between 0-100');
+                    }
+                } else {
+                    if (
+                        config.ColourOneMaxLenghtPercent >= 0 &&
+                        config.ColourOneMaxLenghtPercent <= this.BattleFieldSize
+                    ) {
+                        this.ColourOneMaxLenghtPercent = config.ColourOneMaxLenghtPercent;
+                        this.ColourOneMaxLenghtIsPercent = false;
+                    } else {
+                        throw new Error(
+                            '"ColourOneMaxLenghtPercent" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
+                        );
+                    }
                 }
             }
 
@@ -126,6 +163,13 @@ export class ClashMode implements IMode {
     }
 
     private BattleOdd(grid: Grid): Grid {
+        let maxLenght: number = 0;
+        if (this.ColourOneMaxLenghtIsPercent) {
+            maxLenght = Math.ceil((this.BattleFieldSize / 100) * this.ColourOneMaxLenghtPercent);
+        } else {
+            maxLenght = Math.ceil(this.ColourOneMaxLenghtPercent);
+        }
+
         for (const row of grid.Cells) {
             if (!IsOdd(row[0].Y)) continue;
             let cells: Array<Cell> = row.filter((cell) => this.IsInBattle(cell.X));
@@ -136,7 +180,7 @@ export class ClashMode implements IMode {
             for (const cell of cells) {
                 if (currentBattleLenght === 0) {
                     attack = !attack;
-                    this.Random.Max = battleLenghtLeft;
+                    this.Random.Max = maxLenght < battleLenghtLeft ? maxLenght : battleLenghtLeft;
                     currentBattleLenght = Math.round(this.Random.Next());
                     battleLenghtLeft -= currentBattleLenght;
 
@@ -232,7 +276,7 @@ export class ClashMode implements IMode {
                 if (!aboveRow && !bewlowRow) {
                     continue;
                 }
-
+                
                 if (
                     aboveRow[this.BattleField.Start - 1].Type === CellTypes.Defeat &&
                     bewlowRow[this.BattleField.Start - 1].Type === CellTypes.Defeat
