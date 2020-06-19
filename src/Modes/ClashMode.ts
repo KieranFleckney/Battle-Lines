@@ -9,12 +9,10 @@ export class ClashMode implements IMode {
     Random: SeedRand;
     BattleFieldSize: number;
     BattleField: BattleField;
+    // TODO: Rename to colour not even
     EvenMaxLenghtPercent: number;
     EvenChancePercent: number;
-
-    ApplyConfig() {}
-
-    new(): void {}
+    // TODO: add paramters to colour one not just colour 2
 
     constructor(config: any) {
         if (config) {
@@ -57,6 +55,7 @@ export class ClashMode implements IMode {
         grid = this.GenerateDefenders(grid);
         grid = this.BattleOdd(grid);
         grid = this.BattleEven(grid);
+        grid = this.FinalStand(grid);
         return grid;
     }
 
@@ -132,14 +131,11 @@ export class ClashMode implements IMode {
         return grid;
     }
 
-    // REVIEW: Maybe I should check for whole possile lenght then rand once, unsure sounds more complicated.
     private BattleEven(grid: Grid): Grid {
         let maxLenght: number = Math.ceil((this.BattleFieldSize / 100) * this.EvenMaxLenghtPercent);
-        // Had to set self to this, becasue the 'grid.Cells.find' is causing 'this' to be set to undefined
-        let self = this;
         for (const row of grid.Cells) {
             if (IsOdd(row[0].Y)) continue;
-            let cells: Array<Cell> = row.filter((cell) => self.IsInBattle(cell.X));
+            let cells: Array<Cell> = row.filter((cell) => this.IsInBattle(cell.X));
             let aboveRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y + 1);
             let bewlowRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y - 1);
             let pointCount: number = 0;
@@ -178,15 +174,38 @@ export class ClashMode implements IMode {
                     cell.Type = CellTypes.Defeat;
                     continue;
                 } else {
-                    self.Random.Max = 1;
-                    let battleOutcome: number = self.Random.Next();
-                    if (battleOutcome < self.EvenChancePercent) {
+                    this.Random.Max = 1;
+                    let battleOutcome: number = this.Random.Next();
+                    if (battleOutcome < this.EvenChancePercent) {
                         cell.Type = CellTypes.Victory;
                         pointCount += 1;
                     } else {
                         cell.Type = CellTypes.Defeat;
                         pointCount = 0;
                     }
+                }
+            }
+        }
+
+        return grid;
+    }
+
+    private FinalStand(grid: Grid): Grid {
+        for (const row of grid.Cells) {
+            if (!IsOdd(row[0].Y)) continue;
+            if (row[this.BattleField.Start - 1].Type === CellTypes.Defeat) {
+                let aboveRow: Array<Cell> | undefined = grid.Cells[row[0].Y];
+                let bewlowRow: Array<Cell> | undefined = grid.Cells[row[0].Y - 2];
+
+                if (!aboveRow && !bewlowRow) {
+                    continue;
+                }
+
+                if (
+                    aboveRow[this.BattleField.Start - 1].Type === CellTypes.Defeat &&
+                    bewlowRow[this.BattleField.Start - 1].Type === CellTypes.Defeat
+                ) {
+                    row[this.BattleField.Start - 1].Type = CellTypes.Victory;
                 }
             }
         }
@@ -204,3 +223,5 @@ export class ClashMode implements IMode {
         return inBattle;
     }
 }
+
+// TODO: End of battlefield someones times odd seems to have a lot of single/dots which is vert obvoiues
