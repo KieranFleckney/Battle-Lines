@@ -9,9 +9,9 @@ export class ClashMode implements IMode {
     Random: SeedRand;
     BattleFieldSize: number;
     BattleField: BattleField;
-    // TODO: Rename to colour not even
-    EvenMaxLenghtPercent: number;
-    EvenChancePercent: number;
+    // TODO: Allow to be percent or value <= battlefield
+    ColourTwoMaxLenghtPercent: number;
+    ColourTwoChancePercent: number;
     // TODO: add paramters to colour one not just colour 2
 
     constructor(config: any) {
@@ -22,21 +22,21 @@ export class ClashMode implements IMode {
                 throw new Error('Missing "BattleFieldSize" from Config');
             }
 
-            this.EvenMaxLenghtPercent = 20;
+            this.ColourTwoMaxLenghtPercent = 20;
 
             if (config.EvenMaxLenghtPercent) {
                 if (config.EvenMaxLenghtPercent >= 0 && config.EvenMaxLenghtPercent <= 100) {
-                    this.EvenMaxLenghtPercent = config.EvenMaxLenghtPercent;
+                    this.ColourTwoMaxLenghtPercent = config.EvenMaxLenghtPercent;
                 } else {
                     throw new Error('"EvenMaxLenghtPercent" must be a number between 0-100');
                 }
             }
 
-            this.EvenChancePercent = 0.75;
+            this.ColourTwoChancePercent = 0.75;
 
             if (config.EvenChancePercent) {
                 if (config.EvenChancePercent >= 0 && config.EvenChancePercent <= 100) {
-                    this.EvenChancePercent = config.EvenChancePercent / 100;
+                    this.ColourTwoChancePercent = config.EvenChancePercent / 100;
                 } else {
                     throw new Error('"EvenChancePercent" must be a number between 0-100');
                 }
@@ -132,7 +132,7 @@ export class ClashMode implements IMode {
     }
 
     private BattleEven(grid: Grid): Grid {
-        let maxLenght: number = Math.ceil((this.BattleFieldSize / 100) * this.EvenMaxLenghtPercent);
+        let maxLenght: number = Math.ceil((this.BattleFieldSize / 100) * this.ColourTwoMaxLenghtPercent);
         for (const row of grid.Cells) {
             if (IsOdd(row[0].Y)) continue;
             let cells: Array<Cell> = row.filter((cell) => this.IsInBattle(cell.X));
@@ -176,7 +176,7 @@ export class ClashMode implements IMode {
                 } else {
                     this.Random.Max = 1;
                     let battleOutcome: number = this.Random.Next();
-                    if (battleOutcome < this.EvenChancePercent) {
+                    if (battleOutcome < this.ColourTwoChancePercent) {
                         cell.Type = CellTypes.Victory;
                         pointCount += 1;
                     } else {
