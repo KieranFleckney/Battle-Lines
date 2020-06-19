@@ -11,6 +11,7 @@ export class ClashMode implements IMode {
     BattleField: BattleField;
     // TODO: Allow to be percent or value <= battlefield
     ColourTwoMaxLenghtPercent: number;
+    private ColourTwoMaxLenghtIsPercent: boolean;
     ColourTwoChancePercent: number;
     // TODO: add paramters to colour one not just colour 2
 
@@ -23,22 +24,47 @@ export class ClashMode implements IMode {
             }
 
             this.ColourTwoMaxLenghtPercent = 20;
+            this.ColourTwoMaxLenghtIsPercent = true;
 
-            if (config.EvenMaxLenghtPercent) {
-                if (config.EvenMaxLenghtPercent >= 0 && config.EvenMaxLenghtPercent <= 100) {
-                    this.ColourTwoMaxLenghtPercent = config.EvenMaxLenghtPercent;
+            if (config.ColourTwoMaxLenghtPercent) {
+                if (
+                    config.ColourTwoMaxLenghtPercent.toString().substr(config.ColourTwoMaxLenghtPercent.length - 1) ===
+                    '%'
+                ) {
+                    let percent: number = Number(
+                        config.ColourTwoMaxLenghtPercent.toString().substr(
+                            0,
+                            config.ColourTwoMaxLenghtPercent.length - 1
+                        )
+                    );
+                    if (percent >= 0 && percent <= 100) {
+                        this.ColourTwoMaxLenghtPercent = percent;
+                        this.ColourTwoMaxLenghtIsPercent = true;
+                    } else {
+                        throw new Error('"ColourTwoMaxLenghtPercent" must be a number between 0-100');
+                    }
                 } else {
-                    throw new Error('"EvenMaxLenghtPercent" must be a number between 0-100');
+                    if (
+                        config.ColourTwoMaxLenghtPercent >= 0 &&
+                        config.ColourTwoMaxLenghtPercent <= this.BattleFieldSize
+                    ) {
+                        this.ColourTwoMaxLenghtPercent = config.ColourTwoMaxLenghtPercent;
+                        this.ColourTwoMaxLenghtIsPercent = false;
+                    } else {
+                        throw new Error(
+                            '"ColourTwoMaxLenghtPercent" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
+                        );
+                    }
                 }
             }
 
             this.ColourTwoChancePercent = 0.75;
 
-            if (config.EvenChancePercent) {
-                if (config.EvenChancePercent >= 0 && config.EvenChancePercent <= 100) {
-                    this.ColourTwoChancePercent = config.EvenChancePercent / 100;
+            if (config.ColourTwoChancePercent) {
+                if (config.ColourTwoChancePercent >= 0 && config.ColourTwoChancePercent <= 100) {
+                    this.ColourTwoChancePercent = config.ColourTwoChancePercent / 100;
                 } else {
-                    throw new Error('"EvenChancePercent" must be a number between 0-100');
+                    throw new Error('"ColourTwoChancePercent" must be a number between 0-100');
                 }
             }
 
@@ -132,7 +158,13 @@ export class ClashMode implements IMode {
     }
 
     private BattleEven(grid: Grid): Grid {
-        let maxLenght: number = Math.ceil((this.BattleFieldSize / 100) * this.ColourTwoMaxLenghtPercent);
+        let maxLenght: number = 0;
+        if (this.ColourTwoMaxLenghtIsPercent) {
+            maxLenght = Math.ceil((this.BattleFieldSize / 100) * this.ColourTwoMaxLenghtPercent);
+        } else {
+            maxLenght = Math.ceil(this.ColourTwoMaxLenghtPercent);
+        }
+
         for (const row of grid.Cells) {
             if (IsOdd(row[0].Y)) continue;
             let cells: Array<Cell> = row.filter((cell) => this.IsInBattle(cell.X));
