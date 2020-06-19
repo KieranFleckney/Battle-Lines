@@ -12,7 +12,6 @@ export class ClashMode implements IMode {
     ColourTwoMaxLenghtPercent: number;
     private ColourTwoMaxLenghtIsPercent: boolean;
     ColourTwoChancePercent: number;
-    // TODO: add paramters to colour one not just colour 2
     ColourOneMaxLenghtPercent: number;
     private ColourOneMaxLenghtIsPercent: boolean;
 
@@ -273,10 +272,10 @@ export class ClashMode implements IMode {
                 let aboveRow: Array<Cell> | undefined = grid.Cells[row[0].Y];
                 let bewlowRow: Array<Cell> | undefined = grid.Cells[row[0].Y - 2];
 
-                if (!aboveRow && !bewlowRow) {
+                if (!aboveRow || !bewlowRow) {
                     continue;
                 }
-                
+
                 if (
                     aboveRow[this.BattleField.Start - 1].Type === CellTypes.Defeat &&
                     bewlowRow[this.BattleField.Start - 1].Type === CellTypes.Defeat
