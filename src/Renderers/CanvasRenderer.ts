@@ -18,8 +18,13 @@ export class CanvasRenderer implements IRenderer {
         this.Width = config.Width;
         this.CellSize = config.CellSize;
 
+        if (!config.Canvas) throw new Error('Missing "Canvas"');
         this.Canvas = config.Canvas;
+
+        if (!config.ColourOne) throw new Error('Missing "ColourOne"');
         this.ColourOne = config.ColourOne;
+
+        if (!config.ColourTwo) throw new Error('Missing "ColourTwo"');
         this.ColourTwo = config.ColourTwo;
     }
 
@@ -191,3 +196,5 @@ export class CanvasRenderer implements IRenderer {
         return answer;
     }
 }
+
+// TODO: Allow grandient

@@ -4,12 +4,20 @@ export class Cell {
     X: number;
     Y: number;
     Type: CellTypes;
-    Colour: string;
 
     constructor(x: number, y: number) {
-        this.X = x;
-        this.Y = y;
+        if (x) {
+            this.X = x;
+        } else {
+            throw new Error('X missig');
+        }
+
+        if (y) {
+            this.Y = y;
+        } else {
+            throw new Error('Y missig');
+        }
+
         this.Type = CellTypes.BattleGround;
-        this.Colour = '';
     }
 }
