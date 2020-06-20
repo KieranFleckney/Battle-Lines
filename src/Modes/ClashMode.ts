@@ -14,6 +14,7 @@ export class ClashMode implements IMode {
     ColourTwoChancePercent: number;
     ColourOneMaxLenghtPercent: number;
     private ColourOneMaxLenghtIsPercent: boolean;
+    LastCellSingleChance: number;
 
     constructor(config: any) {
         if (config) {
@@ -101,6 +102,16 @@ export class ClashMode implements IMode {
                             '"ColourOneMaxLenghtPercent" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
                         );
                     }
+                }
+            }
+
+            this.LastCellSingleChance = 0.5;
+
+            if (config.LastCellSingleChance) {
+                if (config.LastCellSingleChance >= 0 && config.LastCellSingleChance <= 100) {
+                    this.LastCellSingleChance = config.LastCellSingleChance / 100;
+                } else {
+                    throw new Error('"LastCellSingleChance" must be a number between 0-100');
                 }
             }
 
@@ -272,15 +283,24 @@ export class ClashMode implements IMode {
                 let aboveRow: Array<Cell> | undefined = grid.Cells[row[0].Y];
                 let bewlowRow: Array<Cell> | undefined = grid.Cells[row[0].Y - 2];
 
-                if (!aboveRow || !bewlowRow) {
-                    continue;
+                if (aboveRow && bewlowRow) {
+                    if (
+                        aboveRow[this.BattleField.Start - 1].Type === CellTypes.Defeat &&
+                        bewlowRow[this.BattleField.Start - 1].Type === CellTypes.Defeat
+                    ) {
+                        row[this.BattleField.Start - 1].Type = CellTypes.Victory;
+                    }
                 }
+            }
 
-                if (
-                    aboveRow[this.BattleField.Start - 1].Type === CellTypes.Defeat &&
-                    bewlowRow[this.BattleField.Start - 1].Type === CellTypes.Defeat
-                ) {
-                    row[this.BattleField.Start - 1].Type = CellTypes.Victory;
+            // REVIEW: Maybe it worth look at the second half of the battle field for all single cells and fight again
+            if (
+                row[this.BattleField.End - 1].Type === CellTypes.Victory &&
+                row[this.BattleField.End - 2].Type === CellTypes.Defeat
+            ) {
+                this.Random.Max = 1;
+                if (this.Random.Next() < this.LastCellSingleChance) {
+                    row[this.BattleField.End - 1].Type = CellTypes.Defeat;
                 }
             }
         }
