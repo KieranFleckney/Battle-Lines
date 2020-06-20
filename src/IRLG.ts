@@ -68,22 +68,20 @@ export class IRLG {
         }
     }
 
-    // TODO: Change to Update() and finish
-    // Regenertate all classes properties
-    Generate() {}
-
-    // TODO:Update config setting
-    // UpdateConfig(config: Config) {}
-
-    // TODO: Add a function which does and next and draw together
-
     // Generate next grid
-    Next() {
+    Generate() {
         this.Grid = this.Mode.Battle(this.Grid);
     }
 
+    // Draw current grid
     Draw() {
         this.Renderer.Draw(this.Grid.Cells);
+    }
+
+    // Generate new grid and then draw
+    Next() {
+        this.Generate();
+        this.Draw();
     }
 }
 
