@@ -23,6 +23,8 @@ export class IRLG {
             this.Random = new SeedRand(config.Seed);
             this.Seed = this.Random.Seed;
 
+            //console.log(this.Random.OSeed);
+
             if (config.CellSize) {
                 this.CellSize = config.CellSize;
             } else {
@@ -50,6 +52,7 @@ export class IRLG {
             }
 
             if (config.Renderer) {
+                config.RendererConfig = config.RendererConfig || {};
                 config.RendererConfig.Random = this.Random;
                 config.RendererConfig.Width = this.Width;
                 config.RendererConfig.Height = this.Height;
@@ -65,11 +68,14 @@ export class IRLG {
         }
     }
 
+    // TODO: Change to Update() and finish
     // Regenertate all classes properties
     Generate() {}
 
-    // Update config setting
+    // TODO:Update config setting
     // UpdateConfig(config: Config) {}
+
+    // TODO: Add a function which does and next and draw together
 
     // Generate next grid
     Next() {
@@ -86,3 +92,6 @@ export function New(config: Config): IRLG {
     let newIRLG = new IRLG(config);
     return newIRLG;
 }
+
+// TODO: Add more comments becasue I'll forget what things do
+// TODO: Add Tests (Most likly Jasmine)
