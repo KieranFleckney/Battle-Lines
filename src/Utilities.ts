@@ -1,3 +1,7 @@
+/**
+ * @param value Value to check is odd
+ * @returns true or false
+ */
 export function IsOdd(value: number): boolean {
     if (value % 2 == 1) {
         return true;
@@ -6,7 +10,13 @@ export function IsOdd(value: number): boolean {
     }
 }
 
-export function Rand(max?: number, min?: number, negtive: boolean = false, floor: boolean = false): number {
+/**
+ * Will randomly generate a num between 0 and 1
+ * @param max (Optional) Max number to generated
+ * @param min (Optional) Min number to generate
+ * @param floor (Optional) round down the result
+ */
+export function Rand(max?: number, min?: number, floor: boolean = false): number {
     max = max || 1;
     let newNum;
     if (min) {
@@ -17,10 +27,6 @@ export function Rand(max?: number, min?: number, negtive: boolean = false, floor
         newNum = Math.random() * max;
     }
 
-    if (negtive) {
-        newNum -= max / 2;
-    }
-
     if (floor) {
         newNum = Math.floor(newNum);
     }
@@ -29,12 +35,19 @@ export function Rand(max?: number, min?: number, negtive: boolean = false, floor
 }
 
 // http://indiegamr.com/generate-repeatable-random-numbers-in-js/ works as needed with out too complicated maths or external libiary
+
 export class SeedRand {
     OSeed: number;
     Seed: number;
     Max: number;
     Min: number;
 
+    /**
+     * Will randomly generate a number between 0 and 1 based on a seed
+     * @param seed (Optional) Seed of the random generator
+     * @param max (Optional) Max number to generated
+     * @param min (Optional) Min number to generate
+     */
     constructor(seed?: number, max?: number, min?: number) {
         this.OSeed = seed || Rand(1000000);
         this.Seed = this.OSeed;
@@ -42,6 +55,9 @@ export class SeedRand {
         this.Max = max || 1;
     }
 
+    /**
+     * Give you the next random number in the seed
+     */
     Next() {
         this.Seed = (this.Seed * 9301 + 49297) % 233280;
         var rnd = this.Seed / 233280;

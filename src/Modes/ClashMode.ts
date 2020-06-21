@@ -16,6 +16,10 @@ export class ClashMode implements IMode {
     private ColourOneMaxLenghtIsPercent: boolean;
     LastCellSingleChance: number;
 
+    /**
+     * ClashMode generates a pattern with vertical strip centre
+     * @param config
+     */
     constructor(config: any) {
         if (config) {
             if (config.BattleFieldSize) {
@@ -24,6 +28,7 @@ export class ClashMode implements IMode {
                 throw new Error('Missing "BattleFieldSize" from Config');
             }
 
+            // REVIEW: Change default to 40%??
             this.ColourTwoMaxLenghtPercent = 20;
             this.ColourTwoMaxLenghtIsPercent = true;
 
@@ -122,6 +127,10 @@ export class ClashMode implements IMode {
         }
     }
 
+    /**
+     * Generate next pattern for next seed
+     * @param grid
+     */
     Battle(grid: Grid): Grid {
         this.CalculateBattleField(grid.Columns);
         grid = this.GenerateAttackers(grid);
@@ -132,6 +141,10 @@ export class ClashMode implements IMode {
         return grid;
     }
 
+    /**
+     * Calculates battlefield size
+     * @param columns number of columns in grid
+     */
     private CalculateBattleField(columns: number): void {
         let battleGroundSize: number = 0;
 
@@ -148,6 +161,10 @@ export class ClashMode implements IMode {
         this.BattleField = new BattleField(battleFieldStart, battleFieldEnd);
     }
 
+    /**
+     * Places colour one on grid
+     * @param grid
+     */
     private GenerateAttackers(grid: Grid): Grid {
         for (const row of grid.Cells) {
             for (const cell of row) {
@@ -160,6 +177,10 @@ export class ClashMode implements IMode {
         return grid;
     }
 
+    /**
+     * Places colour two on grid
+     * @param grid
+     */
     private GenerateDefenders(grid: Grid): Grid {
         for (const row of grid.Cells) {
             for (const cell of row) {
@@ -172,6 +193,10 @@ export class ClashMode implements IMode {
         return grid;
     }
 
+    /**
+     * Calculates lines for all odd rows in grid for colour one
+     * @param grid
+     */
     private BattleOdd(grid: Grid): Grid {
         let maxLenght: number = 0;
         if (this.ColourOneMaxLenghtIsPercent) {
@@ -211,6 +236,10 @@ export class ClashMode implements IMode {
         return grid;
     }
 
+    /**
+     * Calculates lines for all even rows in grid for colour one
+     * @param grid
+     */
     private BattleEven(grid: Grid): Grid {
         let maxLenght: number = 0;
         if (this.ColourTwoMaxLenghtIsPercent) {
@@ -234,7 +263,6 @@ export class ClashMode implements IMode {
                 let cellsToCheck: Array<Cell | undefined> = new Array<Cell>();
                 let skip: boolean = false;
 
-                // Get list of a few points which must be there for the visuals to work
                 cellsToCheck.push(aboveRow?.[cell.X - 1]);
                 cellsToCheck.push(aboveRow?.[cell.X]);
                 cellsToCheck.push(aboveRow?.[cell.X - 2]);
@@ -242,7 +270,6 @@ export class ClashMode implements IMode {
                 cellsToCheck.push(bewlowRow?.[cell.X]);
                 cellsToCheck.push(bewlowRow?.[cell.X - 2]);
 
-                // check if the list if points are of the correct type
                 for (const cellCheck of cellsToCheck) {
                     if (cellCheck?.Type !== CellTypes.Victory) {
                         skip = true;
@@ -276,9 +303,15 @@ export class ClashMode implements IMode {
         return grid;
     }
 
+    /**
+     * Final pass over all rows to fix some anomalies with line generates
+     * @param grid
+     */
     private FinalStand(grid: Grid): Grid {
         for (const row of grid.Cells) {
             if (!IsOdd(row[0].Y)) continue;
+
+            // This checks to see if three consecutive rows (start of battlefield) are the same lengh then changes the odd row by one
             if (row[this.BattleField.Start - 1].Type === CellTypes.Defeat) {
                 let aboveRow: Array<Cell> | undefined = grid.Cells[row[0].Y];
                 let bewlowRow: Array<Cell> | undefined = grid.Cells[row[0].Y - 2];
@@ -293,7 +326,7 @@ export class ClashMode implements IMode {
                 }
             }
 
-            // REVIEW: Maybe it worth look at the second half of the battle field for all single cells and fight again
+            // Chance to remove alone cells at the end of the battlefield
             if (
                 row[this.BattleField.End - 1].Type === CellTypes.Victory &&
                 row[this.BattleField.End - 2].Type === CellTypes.Defeat
@@ -308,6 +341,10 @@ export class ClashMode implements IMode {
         return grid;
     }
 
+    /**
+     * Checks if current cell is in battlefield zone
+     * @param x X value of current cell
+     */
     private IsInBattle(x: number): boolean {
         let inBattle: boolean = false;
 
@@ -318,5 +355,3 @@ export class ClashMode implements IMode {
         return inBattle;
     }
 }
-
-// TODO: End of battlefield someones times odd seems to have a lot of single/dots which is vert obvoiues

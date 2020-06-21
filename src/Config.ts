@@ -12,6 +12,17 @@ export class Config {
     RendererConfig?: any;
     Seed?: number;
 
+    /**
+     *
+     * @param width Width of canvas
+     * @param height Height of canvas
+     * @param cellSize Size of each cell in pixels
+     * @param mode Pattern generate mode
+     * @param modeConfig (Optional) Config options for the mode
+     * @param renderer Renderer you like to use to display the output
+     * @param rendererConfig (Optional) Config options for the renderer
+     * @param seed (Optional) Seed for the random number generate
+     */
     constructor(
         width: number,
         height: number,

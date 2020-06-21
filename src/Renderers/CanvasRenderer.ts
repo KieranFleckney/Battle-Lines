@@ -12,6 +12,11 @@ export class CanvasRenderer implements IRenderer {
     Canvas: HTMLCanvasElement;
     ColourOne: string;
     ColourTwo: string;
+
+    /**
+     * Renderers pattern to the give canvas
+     * @param config
+     */
     constructor(config: any) {
         this.Random = config.Random;
         this.Height = config.Height;
@@ -28,6 +33,10 @@ export class CanvasRenderer implements IRenderer {
         this.ColourTwo = config.ColourTwo;
     }
 
+    /**
+     * Draw Pattern on canvas
+     * @param points
+     */
     Draw(points: Array<Array<Cell>>): void {
         this.Canvas.height = this.Height;
         this.Canvas.width = this.Width;
@@ -196,5 +205,3 @@ export class CanvasRenderer implements IRenderer {
         return answer;
     }
 }
-
-// TODO: Allow grandient

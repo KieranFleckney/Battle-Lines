@@ -7,6 +7,3 @@ export interface IMode {
 export interface IModeConstructor {
     new (config: any): IMode;
 }
-
-// TODO: Create mode Pincer
-// TODO: Create mode Scatter

@@ -5,6 +5,12 @@ export class Grid {
     Columns: number;
     Cells: Array<Array<Cell>>;
 
+    /**
+     * Grid calculates the row and columns and generates the array of cells
+     * @param width Width of canvas
+     * @param height Height of canvas
+     * @param cellSize Size of each cell in pixels
+     */
     constructor(width: number, height: number, cellSize: number) {
         if (!width) {
             throw new Error('Missing width');

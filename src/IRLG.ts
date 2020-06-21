@@ -6,18 +6,20 @@ import { SeedRand } from './Utilities';
 import { TextRenderer } from './Renderers/TextRenderer';
 
 export class IRLG {
-    // Classes
     Grid: Grid;
     private Renderer: IRenderer;
     private Mode: IMode;
     private Random: SeedRand;
 
-    // Properties
     Seed: number;
     CellSize: number;
     Width: number;
     Height: number;
 
+    /**
+     * Generates abstract irregular rounded lines
+     * @param config
+     */
     constructor(config: Config) {
         if (config) {
             this.Random = new SeedRand(config.Seed);
@@ -68,17 +70,23 @@ export class IRLG {
         }
     }
 
-    // Generate next grid
+    /**
+     * Generates next pattern
+     */
     Generate() {
         this.Grid = this.Mode.Battle(this.Grid);
     }
 
-    // Draw current grid
+    /**
+     * Draw the current pattern via renderer
+     */
     Draw() {
         this.Renderer.Draw(this.Grid.Cells);
     }
 
-    // Generate new grid and then draw
+    /**
+     * Generates next pattern and then draw via renderer
+     */
     Next() {
         this.Generate();
         this.Draw();
@@ -90,6 +98,3 @@ export function New(config: Config): IRLG {
     let newIRLG = new IRLG(config);
     return newIRLG;
 }
-
-// TODO: Add more comments becasue I'll forget what things do
-// TODO: Add Tests (Most likly Jasmine)
