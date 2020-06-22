@@ -1,7 +1,7 @@
 import { IRenderer } from './IRenderer';
 import { Cell } from '../Grid/Cell';
 import { CellTypes } from '../Grid/Cell-Types';
-import { IsOdd, SeedRand } from '../Utilities';
+import { IsOdd, SeedRand } from '../Utilities/Utilities';
 
 export class CanvasRenderer implements IRenderer {
     Random: SeedRand;

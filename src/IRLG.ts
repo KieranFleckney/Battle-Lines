@@ -2,7 +2,7 @@ import { Config } from './Config';
 import { Grid } from './Grid/Grid';
 import { IRenderer } from './Renderers/IRenderer';
 import { IMode } from './Modes/IMode';
-import { SeedRand } from './Utilities';
+import { SeedRand } from './Utilities/Utilities';
 import { TextRenderer } from './Renderers/TextRenderer';
 
 export class IRLG {

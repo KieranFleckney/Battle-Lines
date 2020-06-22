@@ -13,4 +13,4 @@ export { Grid } from './Grid/Grid';
 export { Cell } from './Grid/Cell';
 export { CellTypes } from './Grid/Cell-Types';
 
-export * from './Utilities';
+export * from './Utilities/Utilities';

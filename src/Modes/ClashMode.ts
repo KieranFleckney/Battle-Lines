@@ -1,4 +1,4 @@
-import { SeedRand, IsOdd } from '../Utilities';
+import { SeedRand, IsOdd } from '../Utilities/Utilities';
 import { Grid } from '../Grid/Grid';
 import { BattleField } from './BattleField';
 import { Cell } from '../Grid/Cell';

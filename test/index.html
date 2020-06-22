@@ -11,40 +11,98 @@
             body {
                 margin: 0;
                 overflow: hidden;
+                /* background: linear-gradient(to bottom, blue, pink); */
+                /* background: linear-gradient(to bottom left, blue, pink); */
             }
         </style>
     </head>
     <body>
         <canvas id="canvas"></canvas>
+        <div id="div" style="height: 500px; width: 500px; margin-top: 50px;"></div>
         <script>
             let t;
             document.addEventListener('DOMContentLoaded', function () {
                 // let config = new IRLG.GridConfig(1000, 1000, 20, 10);
                 let canvas = document.getElementById('canvas');
-                let renderer = new IRLG.CanvasRenderer(canvas, '#330160', '#df0082');
-                setInterval(function () {
-                    let config = new IRLG.Config(
-                        window.innerWidth,
-                        window.innerHeight,
-                        20,
-                        IRLG.ClashMode,
-                        {
-                            BattleFieldSize: 20,
-                        },
-                        IRLG.CanvasRenderer,
-                        {
-                            Canvas: canvas,
-                            ColourOne: '#330160',
-                            ColourTwo: '#df0082',
-                        }
-                    );
+                // setInterval(function () {
+                let config = new IRLG.Config(
+                    window.innerWidth,
+                    window.innerHeight,
+                    20,
+                    IRLG.ClashMode,
+                    {
+                        BattleFieldSize: 20,
+                        ColourTwoMaxLenghtPercent: '40%',
+                        // ColourTwoChancePercent: 85,
+                        // ColourOneMaxLenghtPercent: '1%',
+                    },
+                    IRLG.CanvasRenderer,
+                    {
+                        Canvas: canvas,
+                        ColourOne: '#330160',
+                        ColourTwo: '#df0082',
+                    }
+                    // 790830.7481158044
+                    // 774961.8726039634
+                    // 35946.92809118416
+                    // 132629.73999237482
+                    // 308979.77961913805
+                    //35946.92809118416
+                );
 
-                    t = new IRLG.New(config);
-                    // var t = new IRLG.New(config);
-                    t.Next();
-                    t.Draw();
-                }, 1000);
+                t = new IRLG.New(config);
+                // var t = new IRLG.New(config);
+                //t.Next();
+                // }, 1000);
             });
+
+            let one = '45deg, red, blue';
+            let two = '135deg, orange, orange 60%, cyan';
+            let three = 'to bottom left , red 20%, orange 20% 40%, yellow 40% 60%, green 60% 80%, blue 80%';
+
+            let div = document.getElementById('div');
+
+            canvas.height = 500;
+            canvas.width = 500;
+            var ctx = canvas.getContext('2d');
+
+            let angle = 0;
+
+            // setInterval(function () {
+            let rainbow = angle + 'deg , red 20%, orange 20% 40%, yellow 40% 60%, green 60% 80%, blue 80%';
+            div.style.backgroundImage = 'linear-gradient(' + rainbow + ')';
+
+            ctx.clearRect(0, 0, 500, 500);
+
+            let rotateScaleGradient = IRLG.CssGradientToCanvasGradientLinear(rainbow, 500, 500, 500, 500);
+            let grd = ctx.createLinearGradient(
+                rotateScaleGradient.LinearGradientParameters.X0,
+                rotateScaleGradient.LinearGradientParameters.Y0,
+                rotateScaleGradient.LinearGradientParameters.X1,
+                rotateScaleGradient.LinearGradientParameters.Y1
+            );
+
+            grd = IRLG.AddColourStops(rotateScaleGradient.ColourStops, grd);
+
+            ctx.setTransform(
+                rotateScaleGradient.TransformMatrix.A,
+                rotateScaleGradient.TransformMatrix.B,
+                rotateScaleGradient.TransformMatrix.C,
+                rotateScaleGradient.TransformMatrix.D,
+                rotateScaleGradient.TransformMatrix.E,
+                rotateScaleGradient.TransformMatrix.F
+            );
+
+            ctx.fillStyle = grd;
+            ctx.fillRect(
+                rotateScaleGradient.DrawRectParameters.X,
+                rotateScaleGradient.DrawRectParameters.Y,
+                rotateScaleGradient.DrawRectParameters.Width,
+                rotateScaleGradient.DrawRectParameters.Height
+            );
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            angle += 1;
+            // }, 50);
         </script>
     </body>
 </html>

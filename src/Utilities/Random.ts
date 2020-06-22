@@ -1,16 +1,4 @@
 /**
- * @param value Value to check is odd
- * @returns true or false
- */
-export function IsOdd(value: number): boolean {
-    if (value % 2 == 1) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-/**
  * Will randomly generate a num between 0 and 1
  * @param max (Optional) Max number to generated
  * @param min (Optional) Min number to generate
