@@ -1,4 +1,3 @@
-export { IsOdd } from './IsOdd';
 export { Rand, SeedRand } from './Random';
 export {
     CssGradientToCanvasGradientLinear,
@@ -7,3 +6,4 @@ export {
     DegToRad,
     AddColourStops,
 } from './Gradient';
+export { IsHexColour, IsCssGradient, IsOdd } from './Validators';
