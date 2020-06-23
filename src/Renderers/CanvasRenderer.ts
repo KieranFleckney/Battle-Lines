@@ -1,7 +1,13 @@
 import { IRenderer } from './IRenderer';
 import { Cell } from '../Grid/Cell';
 import { CellTypes } from '../Grid/Cell-Types';
-import { IsOdd, SeedRand } from '../Utilities/Utilities';
+import {
+    IsOdd,
+    SeedRand,
+    IsCssGradient,
+    CssGradientToCanvasGradientLinear,
+    AddColourStops,
+} from '../Utilities/Utilities';
 
 export class CanvasRenderer implements IRenderer {
     Random: SeedRand;
@@ -40,10 +46,22 @@ export class CanvasRenderer implements IRenderer {
     Draw(points: Array<Array<Cell>>): void {
         this.Canvas.height = this.Height;
         this.Canvas.width = this.Width;
-        this.Canvas.style.backgroundColor = this.ColourTwo;
+        if (IsCssGradient(this.ColourTwo)) {
+            this.Canvas.style.backgroundImage = 'linear-gradient(' + this.ColourTwo + ')';
+        } else {
+            this.Canvas.style.backgroundColor = this.ColourTwo;
+        }
         let ctx: CanvasRenderingContext2D | null = this.Canvas.getContext('2d');
         if (ctx) {
-            ctx.fillStyle = this.ColourOne;
+            ctx.clearRect(0, 0, this.Width, this.Height);
+
+            let isGradient = IsCssGradient(this.ColourOne);
+            if (isGradient) {
+                ctx.fillStyle = '#000000';
+            } else {
+                ctx.fillStyle = this.ColourOne;
+            }
+
             let currentHeight: number = 0;
             for (const row of points) {
                 let currentWidth: number = 0;
@@ -65,6 +83,45 @@ export class CanvasRenderer implements IRenderer {
                 }
                 currentWidth = 0;
                 currentHeight += this.CellSize;
+            }
+
+            if (isGradient) {
+                let gradientConfig = CssGradientToCanvasGradientLinear(
+                    this.ColourOne,
+                    this.Width,
+                    this.Height,
+                    this.Width,
+                    this.Height
+                );
+
+                let gradient = ctx.createLinearGradient(
+                    gradientConfig.LinearGradientParameters.X0,
+                    gradientConfig.LinearGradientParameters.Y0,
+                    gradientConfig.LinearGradientParameters.X1,
+                    gradientConfig.LinearGradientParameters.Y1
+                );
+
+                gradient = AddColourStops(gradientConfig.ColourStops, gradient);
+
+                ctx.setTransform(
+                    gradientConfig.TransformMatrix.A,
+                    gradientConfig.TransformMatrix.B,
+                    gradientConfig.TransformMatrix.C,
+                    gradientConfig.TransformMatrix.D,
+                    gradientConfig.TransformMatrix.E,
+                    gradientConfig.TransformMatrix.F
+                );
+
+                ctx.globalCompositeOperation = 'source-in';
+                ctx.fillStyle = gradient;
+                ctx.fillRect(
+                    gradientConfig.DrawRectParameters.X,
+                    gradientConfig.DrawRectParameters.Y,
+                    gradientConfig.DrawRectParameters.Width,
+                    gradientConfig.DrawRectParameters.Height
+                );
+
+                ctx.setTransform(1, 0, 0, 1, 0, 0);
             }
         }
     }
