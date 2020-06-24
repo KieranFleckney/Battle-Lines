@@ -59,6 +59,7 @@ export function ParseGrandientColours(cssGradient: string): Array<ColourStop> {
                     colour = colourValues.shift();
                 }
 
+                // REVIEW: This is not perfect maybe I'll look at how to calculate offset again
                 if (colour) {
                     if (colourValues.length > 0) {
                         for (const offset of colourValues) {
@@ -74,7 +75,7 @@ export function ParseGrandientColours(cssGradient: string): Array<ColourStop> {
                         } else if (i === split.length - 1) {
                             colourStops.push(new ColourStop(colour, 1));
                         } else {
-                            colourStops.push(new ColourStop(colour, 1 / split.length));
+                            colourStops.push(new ColourStop(colour, (1 / (split.length - 1)) * i));
                         }
                     }
                 }
@@ -91,7 +92,7 @@ export function ParseGrandientColours(cssGradient: string): Array<ColourStop> {
  * @param cssGradient css gradient properties
  */
 export function ParseGrandientAngle(cssGradient: string): number {
-    let angle: number = 0;
+    let angle: number = 90;
     if (cssGradient) {
         let split: Array<string> = cssGradient.split(',');
         if (split[0].includes('to') || split[0].includes('deg')) {
@@ -101,41 +102,42 @@ export function ParseGrandientAngle(cssGradient: string): number {
                     let directionsSplit = directions.split(' ');
                     directionsSplit.shift();
                     if (directionsSplit.length > 0 || directionsSplit.length < 2) {
-                        let angleD: number = angle;
-                        let first: boolean = true;
+                        let direction: string = '';
+                        directionsSplit.forEach((d) => {
+                            direction += d.toUpperCase();
+                        });
 
-                        for (let i = 0; i < directionsSplit.length; i++) {
-                            let direction: string = directionsSplit[i].trim().toUpperCase();
-
-                            switch (direction) {
-                                case 'TOP':
-                                    angleD += 180;
-                                    break;
-                                case 'BOTTOM':
-                                    break;
-                                case 'RIGHT':
-                                    angleD += 90;
-                                    break;
-                                case 'LEFT':
-                                    angleD += 270;
-                                    break;
-                            }
-
-                            if (!first) {
-                                switch (direction) {
-                                    case 'RIGHT':
-                                        angleD -= 45;
-                                        break;
-                                    case 'LEFT':
-                                        angleD += 45;
-                                        break;
-                                }
-                            }
-
-                            first = false;
+                        // Yes I am ashamed of this code
+                        switch (direction) {
+                            case 'BOTTOM':
+                                angle = 90;
+                                break;
+                            case 'TOP':
+                                angle = 270;
+                                break;
+                            case 'RIGHT':
+                                angle = 0;
+                                break;
+                            case 'LEFT':
+                                angle = 180;
+                                break;
+                            case 'BOTTOMRIGHT':
+                            case 'RIGHTBOTTOM':
+                                angle = 45;
+                                break;
+                            case 'BOTTOMLEFT':
+                            case 'LEFTBOTTOM':
+                                angle = 135;
+                                break;
+                            case 'TOPRIGHT':
+                            case 'RIGHTTOP':
+                                angle = 315;
+                                break;
+                            case 'TOPLEFT':
+                            case 'LEFTTOP':
+                                angle = 225;
+                                break;
                         }
-
-                        angle = angleD;
                     } else {
                         throw new Error('No direction or too many. Directions:' + directionsSplit.length);
                     }
@@ -149,6 +151,7 @@ export function ParseGrandientAngle(cssGradient: string): number {
             }
         }
     }
+
     return DegToRad(angle);
 }
 
@@ -188,7 +191,7 @@ export function CalculateRotateScale(
     let dy = Math.sin(angle) * scale;
 
     let transformParams = new TransformMatrix(dx, dy, -dy, dx, parentWidth / 2, parentHeight / 2);
-    let linearGradientParameters = new LinearGradientParameters(imageWidth / 2, 0, -imageWidth / 2, 0);
+    let linearGradientParameters = new LinearGradientParameters(-imageWidth / 2, 0, imageWidth / 2, 0);
     let drawRectParameters = new DrawRectParameters(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight);
 
     let rotateScaleGradient = new RotateScaleGradient(
