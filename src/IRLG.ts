@@ -91,6 +91,10 @@ export class IRLG {
         this.Generate();
         this.Draw();
     }
+
+    Export(opt?: any) {
+        return this.Renderer.Export(opt);
+    }
 }
 
 // Added this for UMD bundle, don't look at me like that.

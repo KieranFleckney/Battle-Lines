@@ -7,7 +7,10 @@ import {
     IsCssGradient,
     CssGradientToCanvasGradientLinear,
     AddColourStops,
+    IsBrowser,
+    IsNodejs,
 } from '../Utilities/Utilities';
+import { CanvasRendererExportOptions } from './CanvasRendererExportOptions';
 
 export class CanvasRenderer implements IRenderer {
     Random: SeedRand;
@@ -260,5 +263,40 @@ export class CanvasRenderer implements IRenderer {
         let answer: boolean = false;
         if (point.Type === CellTypes.Defeat) answer = true;
         return answer;
+    }
+
+    Export(opt: CanvasRendererExportOptions): any {
+        switch (opt) {
+            case CanvasRendererExportOptions.DataUrl:
+                return this.DataUrl();
+                break;
+            case CanvasRendererExportOptions.Browser:
+                if (IsBrowser()) {
+                    let image = this.DataUrl();
+                    let link = document.createElement('a');
+                    link.download = this.Random.OSeed.toString() + '.png';
+                    link.href = image;
+                    link.click();
+                    return true;
+                } else {
+                    throw new Error('Not in browser');
+                }
+                break;
+            case CanvasRendererExportOptions.NodeJs:
+                if (IsNodejs()) {
+                    let dataUrl = this.DataUrl();
+                    let data = dataUrl.replace(/^data:image\/\w+;base64,/, '');
+                    return new Buffer(data, 'base64');
+                } else {
+                    throw new Error('Not in Nodejs');
+                }
+                break;
+        }
+        console.log('No options passed in');
+        return false;
+    }
+
+    DataUrl() {
+        return this.Canvas.toDataURL('image/png');
     }
 }

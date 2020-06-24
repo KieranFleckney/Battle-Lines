@@ -38,4 +38,8 @@ export class TextRenderer implements IRenderer {
             console.log(currentLine);
         }
     }
+
+    Export(): void {
+        console.log('Nothing to export :(');
+    }
 }

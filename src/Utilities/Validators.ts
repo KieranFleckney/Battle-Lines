@@ -44,3 +44,15 @@ export function IsOdd(value: number): boolean {
         return false;
     }
 }
+
+export function IsNodejs() {
+    return (
+        typeof process === 'object' &&
+        typeof process.versions === 'object' &&
+        typeof process.versions.node !== 'undefined'
+    );
+}
+
+export function IsBrowser() {
+    return typeof window !== 'undefined' || typeof self !== 'undefined';
+}

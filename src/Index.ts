@@ -7,6 +7,7 @@ export { BattleField } from './Modes/BattleField';
 
 export { IRenderer } from './Renderers/IRenderer';
 export { CanvasRenderer } from './Renderers/CanvasRenderer';
+export { CanvasRendererExportOptions } from './Renderers/CanvasRendererExportOptions';
 export { TextRenderer } from './Renderers/TextRenderer';
 
 export { Grid } from './Grid/Grid';
