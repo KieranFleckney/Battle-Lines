@@ -14,11 +14,20 @@
         "build:bundle": "npx webpack",
         "clean": "npx shx rm -rf dist dist-esm dist-cjs",
         "tsc": "npx tsc",
-        "tsc:w": "npx tsc -watch"
+        "tsc:w": "npx tsc -watch",
+        "test": "karma start karma.conf.js"
     },
     "devDependencies": {
+        "@types/jasmine": "^3.5.11",
         "@types/node": "^14.0.14",
         "awesome-typescript-loader": "^5.2.1",
+        "karma": "^5.1.0",
+        "karma-chrome-launcher": "^3.1.0",
+        "karma-cli": "^2.0.0",
+        "karma-jasmine": "^3.3.1",
+        "karma-spec-reporter": "0.0.32",
+        "karma-summary-reporter": "^1.8.0",
+        "karma-webpack": "^4.0.2",
         "shx": "^0.3.2",
         "typescript": "^3.9.5",
         "uglifyjs-webpack-plugin": "^2.2.0",
