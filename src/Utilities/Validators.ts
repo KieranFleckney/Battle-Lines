@@ -4,9 +4,8 @@
  */
 export function IsHexColour(colour: string): boolean {
     let isColour = false;
-    colour.trim();
-    if (colour) {
-        if (colour.length < 8) {
+    if (colour && (colour = colour.trim())) {
+        if (colour.length === 7) {
             if (colour.substr(0, 1) === '#') {
                 isColour = true;
             }
