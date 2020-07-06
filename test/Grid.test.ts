@@ -6,10 +6,10 @@ describe('Grid test', () => {
             new Grid(null as any, 500, 20);
         }).toThrowError(Error);
         expect(() => {
-            new Grid(500, null, 20);
+            new Grid(500, null as any, 20);
         }).toThrowError(Error);
         expect(() => {
-            new Grid(500, 500, null);
+            new Grid(500, 500, null as any);
         }).toThrowError(Error);
     });
 
