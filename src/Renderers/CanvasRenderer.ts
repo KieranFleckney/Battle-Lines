@@ -9,6 +9,7 @@ import {
     AddColourStops,
     IsBrowser,
     IsNodejs,
+    IsHexColour,
 } from '../Utilities/Utilities';
 import { CanvasRendererExportOptions } from './CanvasRendererExportOptions';
 
@@ -49,20 +50,24 @@ export class CanvasRenderer implements IRenderer {
     Draw(points: Array<Array<Cell>>): void {
         this.Canvas.height = this.Height;
         this.Canvas.width = this.Width;
-        if (IsCssGradient(this.ColourTwo)) {
-            this.Canvas.style.backgroundImage = 'linear-gradient(' + this.ColourTwo + ')';
-        } else {
-            this.Canvas.style.backgroundColor = this.ColourTwo;
-        }
+
         let ctx: CanvasRenderingContext2D | null = this.Canvas.getContext('2d');
         if (ctx) {
             ctx.clearRect(0, 0, this.Width, this.Height);
 
-            let isGradient = IsCssGradient(this.ColourOne);
-            if (isGradient) {
-                ctx.fillStyle = '#000000';
+            if (IsHexColour(this.ColourTwo)) {
+                this.Canvas.style.backgroundColor = this.ColourTwo;
+            } else if (IsCssGradient(this.ColourTwo)) {
+                this.Canvas.style.backgroundImage = 'linear-gradient(' + this.ColourTwo + ')';
             } else {
+                this.Canvas.style.backgroundColor = '#ffffff';
+            }
+
+            let isGradient = IsCssGradient(this.ColourOne);
+            if (IsHexColour(this.ColourOne)) {
                 ctx.fillStyle = this.ColourOne;
+            } else {
+                ctx.fillStyle = '#000000';
             }
 
             let currentHeight: number = 0;
