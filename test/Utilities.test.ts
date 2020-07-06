@@ -24,6 +24,9 @@ describe('Utilities test', () => {
             expect(() => {
                 IsOdd(undefined as any);
             }).toThrowError(Error);
+            expect(() => {
+                IsOdd('1' as any);
+            }).toThrowError(Error);
         });
 
         it('Is Hex Colour', () => {
