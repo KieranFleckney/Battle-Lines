@@ -21,11 +21,32 @@ export function IsHexColour(colour: string): boolean {
  */
 export function IsCssGradient(gradient: string): boolean {
     let isGradient = false;
-    gradient.trim();
 
-    if (gradient) {
-        if (gradient.includes('to') || gradient.includes('deg')) {
-            isGradient = true;
+    if (gradient && (gradient = gradient.trim())) {
+        let hasAngle = false;
+        let split = gradient.split(',');
+        if (split.length >= 2) {
+            let checkEachValue = true;
+            if (split[0].includes('to') || split[0].includes('deg')) {
+                hasAngle = true;
+                if (split.length < 3) checkEachValue = false;
+            }
+
+            if (checkEachValue) {
+                for (let i = 0; i < split.length; i++) {
+                    let value = split[i];
+                    if (value && (value = value.trim()) && IsHexColour(value)) {
+                        isGradient = true;
+                    } else {
+                        if (hasAngle && i === 0) {
+                            isGradient = true;
+                        } else {
+                            isGradient = false;
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 

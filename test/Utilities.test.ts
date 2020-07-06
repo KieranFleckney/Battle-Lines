@@ -66,6 +66,8 @@ describe('Utilities test', () => {
             expect(IsCssGradient('to left, #ff00ff, #00ff00')).toEqual(true);
             expect(IsCssGradient('to top right, #ff00ff, #00ff00,#550000')).toEqual(true);
             expect(IsCssGradient('180deg, #ff00ff, #00ff00')).toEqual(true);
+            expect(IsCssGradient('180deg, ff00ff, #00ff00')).toEqual(false);
+            expect(IsCssGradient('180deg, ff00ff')).toEqual(false);
             expect(IsCssGradient(null as any)).toEqual(false);
             expect(IsCssGradient(undefined as any)).toEqual(false);
         });
