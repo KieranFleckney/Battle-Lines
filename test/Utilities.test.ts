@@ -18,8 +18,12 @@ describe('Utilities test', () => {
             expect(IsOdd(-20)).toEqual(false);
             expect(IsOdd(-35)).toEqual(true);
             expect(IsOdd(-11.11)).toEqual(true);
-            expect(null as any).toThrowError(Error);
-            expect(undefined as any).toThrowError(Error);
+            expect(() => {
+                IsOdd(null as any);
+            }).toThrowError(Error);
+            expect(() => {
+                IsOdd(undefined as any);
+            }).toThrowError(Error);
         });
 
         it('Is Hex Colour', () => {
