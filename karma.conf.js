@@ -10,6 +10,9 @@ module.exports = function (config) {
 
         exclude: [],
 
+        browserNoActivityTimeout: 60000,
+        browserDisconnectTimeout: 60000,
+
         preprocessors: {
             'test/**/*.ts': ['webpack'],
             'test/**/*.js': ['webpack'],
