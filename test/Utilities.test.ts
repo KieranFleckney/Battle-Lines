@@ -1,4 +1,13 @@
-import { IsOdd, IsHexColour, IsCssGradient, Rand, SeedRand, DegToRad, RotateScaleGradient } from '../src/Index';
+import {
+    IsOdd,
+    IsHexColour,
+    IsCssGradient,
+    Rand,
+    SeedRand,
+    DegToRad,
+    RotateScaleGradient,
+    IsNumeric,
+} from '../src/Index';
 import {
     ParseGrandientAngle,
     ParseGrandientColours,
@@ -27,6 +36,18 @@ describe('Utilities test', () => {
             expect(() => {
                 IsOdd('1' as any);
             }).toThrowError(Error);
+        });
+
+        it('Is Numeric', () => {
+            expect(IsNumeric(1)).toEqual(true);
+            expect(IsNumeric(1.01)).toEqual(true);
+            expect(IsNumeric(0.01)).toEqual(true);
+            expect(IsNumeric(-0.01)).toEqual(true);
+            expect(IsNumeric('1')).toEqual(false);
+            expect(IsNumeric({})).toEqual(false);
+            expect(IsNumeric(undefined)).toEqual(false);
+            expect(IsNumeric(null)).toEqual(false);
+            expect(IsNumeric(NaN)).toEqual(false);
         });
 
         it('Is Hex Colour', () => {

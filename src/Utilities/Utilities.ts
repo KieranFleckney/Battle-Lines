@@ -6,4 +6,4 @@ export {
     DegToRad,
     AddColourStops,
 } from './Gradient';
-export { IsHexColour, IsCssGradient, IsOdd, IsNodejs, IsBrowser } from './Validators';
+export { IsHexColour, IsCssGradient, IsOdd, IsNodejs, IsBrowser, IsNumeric } from './Validators';

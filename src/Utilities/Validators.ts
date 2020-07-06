@@ -37,7 +37,7 @@ export function IsCssGradient(gradient: string): boolean {
  * @returns true or false
  */
 export function IsOdd(value: number): boolean {
-    if (value && !isNaN(value) && typeof value === 'number') {
+    if (IsNumeric(value)) {
         if (value % 2 == 0) {
             return false;
         } else {
@@ -45,6 +45,14 @@ export function IsOdd(value: number): boolean {
         }
     } else {
         throw new Error('Not a number');
+    }
+}
+
+export function IsNumeric(value: any): boolean {
+    if (value && !isNaN(value) && typeof value === 'number') {
+        return true;
+    } else {
+        return false;
     }
 }
 
