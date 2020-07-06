@@ -38,10 +38,14 @@ export function IsCssGradient(gradient: string): boolean {
  * @returns true or false
  */
 export function IsOdd(value: number): boolean {
-    if (value % 2 == 1) {
-        return true;
+    if (!isNaN(value)) {
+        if (value % 2 == 0) {
+            return false;
+        } else {
+            return true;
+        }
     } else {
-        return false;
+        throw new Error('Not a number');
     }
 }
 
