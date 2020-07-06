@@ -1,4 +1,4 @@
-import { SeedRand, IsOdd } from '../Utilities/Utilities';
+import { SeedRand, IsOdd, IsNumeric } from '../Utilities/Utilities';
 import { Grid } from '../Grid/Grid';
 import { BattleField } from './BattleField';
 import { Cell } from '../Grid/Cell';
@@ -23,7 +23,11 @@ export class ClashMode implements IMode {
     constructor(config: any) {
         if (config) {
             if (config.BattleFieldSize) {
-                this.BattleFieldSize = config.BattleFieldSize;
+                if (IsNumeric(config.BattleFieldSize)) {
+                    this.BattleFieldSize = config.BattleFieldSize;
+                } else {
+                    throw new Error('"BattleFieldSize" from Config is not a number');
+                }
             } else {
                 throw new Error('Missing "BattleFieldSize" from Config');
             }
@@ -120,7 +124,11 @@ export class ClashMode implements IMode {
                 }
             }
 
-            this.Random = config.Random;
+            if (config.Random instanceof SeedRand) {
+                this.Random = config.Random;
+            } else {
+                throw new Error('Missing Seeded Random Generator (Internal Error)');
+            }
             this.BattleField = new BattleField(0, 0);
         } else {
             throw new Error('Missing config');

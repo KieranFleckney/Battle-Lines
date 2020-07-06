@@ -25,6 +25,11 @@ describe('ClashMode test', () => {
         expect(() => {
             new ClashMode(randomConfig);
         }).toThrowError(Error);
+
+        randomConfig = { BattleFieldSize: 20, Random: [0, 1] as any };
+        expect(() => {
+            new ClashMode(randomConfig);
+        }).toThrowError(Error);
     });
 
     let random = new SeedRand(324363.1680802235);
