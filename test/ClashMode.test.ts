@@ -16,14 +16,19 @@ describe('ClashMode test', () => {
             new ClashMode(battleConfig);
         }).toThrowError(Error);
 
-        let randomConfig = { BattleFieldSize: '20', Random: '' };
+        battleConfig = { BattleFieldSize: '20' };
+        expect(() => {
+            new ClashMode(battleConfig);
+        }).toThrowError(Error);
+
+        let randomConfig = { BattleFieldSize: 20, Random: '' };
         expect(() => {
             new ClashMode(randomConfig);
         }).toThrowError(Error);
     });
 
     let random = new SeedRand(324363.1680802235);
-    let config = { BattleFieldSize: '20', Random: random };
+    let config = { BattleFieldSize: 20, Random: random };
     let clashMode = new ClashMode(config);
     let grid = new Grid(1718, 1287, 20);
     grid = clashMode.Battle(grid);
