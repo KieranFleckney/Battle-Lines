@@ -10,10 +10,8 @@ export class ClashMode implements IMode {
     BattleFieldSize: number;
     BattleField: BattleField;
     ColourTwoMaxLenghtPercent: number;
-    private ColourTwoMaxLenghtIsPercent: boolean;
     ColourTwoChancePercent: number;
     ColourOneMaxLenghtPercent: number;
-    private ColourOneMaxLenghtIsPercent: boolean;
     LastCellSingleChance: number;
 
     /**
@@ -33,10 +31,8 @@ export class ClashMode implements IMode {
             }
 
             // REVIEW: Change default to 40%??
-            this.ColourTwoMaxLenghtPercent = 20;
-            this.ColourTwoMaxLenghtIsPercent = true;
+            this.ColourTwoMaxLenghtPercent = Math.ceil((this.BattleFieldSize / 100) * 20);
 
-            // REVIEW: Calculate the percent here then in BattleEven
             if (config.ColourTwoMaxLenghtPercent) {
                 if (
                     config.ColourTwoMaxLenghtPercent.toString().substr(config.ColourTwoMaxLenghtPercent.length - 1) ===
@@ -49,8 +45,7 @@ export class ClashMode implements IMode {
                         )
                     );
                     if (percent >= 0 && percent <= 100) {
-                        this.ColourTwoMaxLenghtPercent = percent;
-                        this.ColourTwoMaxLenghtIsPercent = true;
+                        this.ColourTwoMaxLenghtPercent = Math.ceil((this.BattleFieldSize / 100) * percent);
                     } else {
                         throw new Error('"ColourTwoMaxLenghtPercent" must be a number between 0-100');
                     }
@@ -59,8 +54,7 @@ export class ClashMode implements IMode {
                         config.ColourTwoMaxLenghtPercent >= 0 &&
                         config.ColourTwoMaxLenghtPercent <= this.BattleFieldSize
                     ) {
-                        this.ColourTwoMaxLenghtPercent = config.ColourTwoMaxLenghtPercent;
-                        this.ColourTwoMaxLenghtIsPercent = false;
+                        this.ColourTwoMaxLenghtPercent = Math.ceil(config.ColourTwoMaxLenghtPercent);
                     } else {
                         throw new Error(
                             '"ColourTwoMaxLenghtPercent" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
@@ -80,7 +74,6 @@ export class ClashMode implements IMode {
             }
 
             this.ColourOneMaxLenghtPercent = this.BattleFieldSize;
-            this.ColourOneMaxLenghtIsPercent = false;
 
             if (config.ColourOneMaxLenghtPercent) {
                 if (
@@ -94,8 +87,7 @@ export class ClashMode implements IMode {
                         )
                     );
                     if (percent >= 0 && percent <= 100) {
-                        this.ColourOneMaxLenghtPercent = percent;
-                        this.ColourOneMaxLenghtIsPercent = true;
+                        this.ColourOneMaxLenghtPercent = Math.ceil((this.BattleFieldSize / 100) * percent);
                     } else {
                         throw new Error('"ColourOneMaxLenghtPercent" must be a number between 0-100');
                     }
@@ -104,8 +96,7 @@ export class ClashMode implements IMode {
                         config.ColourOneMaxLenghtPercent >= 0 &&
                         config.ColourOneMaxLenghtPercent <= this.BattleFieldSize
                     ) {
-                        this.ColourOneMaxLenghtPercent = config.ColourOneMaxLenghtPercent;
-                        this.ColourOneMaxLenghtIsPercent = false;
+                        this.ColourOneMaxLenghtPercent = Math.ceil(config.ColourOneMaxLenghtPercent);
                     } else {
                         throw new Error(
                             '"ColourOneMaxLenghtPercent" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
@@ -206,12 +197,7 @@ export class ClashMode implements IMode {
      * @param grid
      */
     private BattleOdd(grid: Grid): Grid {
-        let maxLenght: number = 0;
-        if (this.ColourOneMaxLenghtIsPercent) {
-            maxLenght = Math.ceil((this.BattleFieldSize / 100) * this.ColourOneMaxLenghtPercent);
-        } else {
-            maxLenght = Math.ceil(this.ColourOneMaxLenghtPercent);
-        }
+        let maxLenght: number = this.ColourOneMaxLenghtPercent || 0;
 
         for (const row of grid.Cells) {
             if (!IsOdd(row[0].Y)) continue;
@@ -249,12 +235,7 @@ export class ClashMode implements IMode {
      * @param grid
      */
     private BattleEven(grid: Grid): Grid {
-        let maxLenght: number = 0;
-        if (this.ColourTwoMaxLenghtIsPercent) {
-            maxLenght = Math.ceil((this.BattleFieldSize / 100) * this.ColourTwoMaxLenghtPercent);
-        } else {
-            maxLenght = Math.ceil(this.ColourTwoMaxLenghtPercent);
-        }
+        let maxLenght: number = this.ColourTwoMaxLenghtPercent || 0;
 
         for (const row of grid.Cells) {
             if (IsOdd(row[0].Y)) continue;
