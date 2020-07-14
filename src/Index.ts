@@ -8,6 +8,7 @@ export { BattleField } from './Modes/BattleField';
 
 export { IRenderer } from './Renderers/IRenderer';
 export { CanvasRenderer } from './Renderers/CanvasRenderer';
+export { CanvasRendererVertical } from './Renderers/CanvasRendererVertical';
 export { CanvasRendererExportOptions } from './Renderers/CanvasRendererExportOptions';
 export { TextRenderer } from './Renderers/TextRenderer';
 
