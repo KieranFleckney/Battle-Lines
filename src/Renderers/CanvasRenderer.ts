@@ -10,6 +10,7 @@ import {
     IsBrowser,
     IsNodejs,
     IsHexColour,
+    DegToRad,
 } from '../Utilities/Utilities';
 import { CanvasRendererExportOptions } from './CanvasRendererExportOptions';
 
@@ -18,6 +19,7 @@ export class CanvasRenderer implements IRenderer {
     Height: number;
     Width: number;
     CellSize: number;
+    Horizontal: boolean;
 
     Canvas: HTMLCanvasElement;
     ColourOne: string;
@@ -32,6 +34,7 @@ export class CanvasRenderer implements IRenderer {
         this.Height = config.Height;
         this.Width = config.Width;
         this.CellSize = config.CellSize;
+        this.Horizontal = config.Horizontal;
 
         if (!config.Canvas) throw new Error('Missing "Canvas"');
         this.Canvas = config.Canvas;
@@ -48,8 +51,13 @@ export class CanvasRenderer implements IRenderer {
      * @param points
      */
     Draw(points: Array<Array<Cell>>): void {
-        this.Canvas.height = this.Height;
-        this.Canvas.width = this.Width;
+        if (this.Horizontal) {
+            this.Canvas.height = this.Width;
+            this.Canvas.width = this.Height;
+        } else {
+            this.Canvas.height = this.Height;
+            this.Canvas.width = this.Width;
+        }
 
         let ctx: CanvasRenderingContext2D | null = this.Canvas.getContext('2d');
         if (ctx) {
@@ -68,6 +76,13 @@ export class CanvasRenderer implements IRenderer {
                 ctx.fillStyle = this.ColourOne;
             } else {
                 ctx.fillStyle = '#000000';
+            }
+
+            if (this.Horizontal) {
+                ctx.save();
+                ctx.translate(this.Canvas.width / 2, this.Canvas.height / 2);
+                ctx.rotate(DegToRad(-90));
+                ctx.translate(-this.Canvas.height / 2, -this.Canvas.width / 2);
             }
 
             let currentHeight: number = 0;
@@ -91,6 +106,10 @@ export class CanvasRenderer implements IRenderer {
                 }
                 currentWidth = 0;
                 currentHeight += this.CellSize;
+            }
+
+            if (this.Horizontal) {
+                ctx.restore();
             }
 
             if (isGradient) {

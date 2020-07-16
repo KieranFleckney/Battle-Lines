@@ -45,6 +45,11 @@ export class IRLG {
                 throw new Error('Missing "Height" from config');
             }
 
+            if (config.Horizontal) {
+                this.Height = config.Width;
+                this.Width = config.Height;
+            }
+
             if (config.Mode) {
                 config.ModeConfig = config.ModeConfig || {};
                 config.ModeConfig.Random = this.Random;
@@ -59,6 +64,7 @@ export class IRLG {
                 config.RendererConfig.Width = this.Width;
                 config.RendererConfig.Height = this.Height;
                 config.RendererConfig.CellSize = this.CellSize;
+                config.RendererConfig.Horizontal = config.Horizontal;
                 this.Renderer = new config.Renderer(config.RendererConfig);
             } else {
                 this.Renderer = new TextRenderer(null);

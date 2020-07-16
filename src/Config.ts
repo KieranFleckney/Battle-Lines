@@ -11,6 +11,7 @@ export class Config {
     Renderer?: IRendererConstructor;
     RendererConfig?: any;
     Seed?: number;
+    Horizontal: boolean;
 
     /**
      *
@@ -31,7 +32,8 @@ export class Config {
         modeConfig?: any,
         renderer?: IRendererConstructor,
         rendererConfig?: any,
-        seed?: number
+        seed?: number,
+        horizontal: boolean = false
     ) {
         this.Height = height;
         this.Width = width;
@@ -42,5 +44,6 @@ export class Config {
         this.Renderer = renderer;
         this.RendererConfig = rendererConfig;
         this.Seed = seed;
+        this.Horizontal = horizontal;
     }
 }
