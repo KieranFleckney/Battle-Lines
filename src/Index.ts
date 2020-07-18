@@ -4,6 +4,7 @@ export { Config } from './Config';
 export { IMode } from './Modes/IMode';
 export { ClashMode } from './Modes/ClashMode';
 export { ScatterMode } from './Modes/ScatterMode';
+export { PincerMode } from './Modes/PincerMode';
 export { BattleField } from './Modes/BattleField';
 
 export { IRenderer } from './Renderers/IRenderer';
