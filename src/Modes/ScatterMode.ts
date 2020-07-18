@@ -9,10 +9,10 @@ export class ScatterMode implements IMode {
     Random: SeedRand;
     BattleFieldSize: number;
     BattleField: BattleField;
-    ColourTwoMaxLenghtPercent: number;
-    ColourTwoChancePercent: number;
-    ColourOneMaxLenghtPercent: number;
-    LastCellSingleChance: number;
+    ColourTwoMaxLenght: number;
+    ColourTwoBiasFactor: number;
+    ColourOneMaxLenght: number;
+    LastSingleCellBiasFactor: number;
 
     /**
      * ScatterMode generates a pattern with vertical strip centre
@@ -31,87 +31,69 @@ export class ScatterMode implements IMode {
             }
 
             // REVIEW: Change default to 40%??
-            this.ColourTwoMaxLenghtPercent = Math.ceil((this.BattleFieldSize / 100) * 20);
+            this.ColourTwoMaxLenght = Math.ceil((this.BattleFieldSize / 100) * 20);
 
-            if (config.ColourTwoMaxLenghtPercent) {
-                if (
-                    config.ColourTwoMaxLenghtPercent.toString().substr(config.ColourTwoMaxLenghtPercent.length - 1) ===
-                    '%'
-                ) {
+            if (config.ColourTwoMaxLenght) {
+                if (config.ColourTwoMaxLenght.toString().substr(config.ColourTwoMaxLenght.length - 1) === '%') {
                     let percent: number = Number(
-                        config.ColourTwoMaxLenghtPercent.toString().substr(
-                            0,
-                            config.ColourTwoMaxLenghtPercent.length - 1
-                        )
+                        config.ColourTwoMaxLenght.toString().substr(0, config.ColourTwoMaxLenght.length - 1)
                     );
                     if (percent >= 0 && percent <= 100) {
-                        this.ColourTwoMaxLenghtPercent = Math.ceil((this.BattleFieldSize / 100) * percent);
+                        this.ColourTwoMaxLenght = Math.ceil((this.BattleFieldSize / 100) * percent);
                     } else {
-                        throw new Error('"ColourTwoMaxLenghtPercent" must be a number between 0-100');
+                        throw new Error('"ColourTwoMaxLenght" must be a number between 0-100');
                     }
                 } else {
-                    if (
-                        config.ColourTwoMaxLenghtPercent >= 0 &&
-                        config.ColourTwoMaxLenghtPercent <= this.BattleFieldSize
-                    ) {
-                        this.ColourTwoMaxLenghtPercent = Math.ceil(config.ColourTwoMaxLenghtPercent);
+                    if (config.ColourTwoMaxLenght >= 0 && config.ColourTwoMaxLenght <= this.BattleFieldSize) {
+                        this.ColourTwoMaxLenght = Math.ceil(config.ColourTwoMaxLenght);
                     } else {
                         throw new Error(
-                            '"ColourTwoMaxLenghtPercent" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
+                            '"ColourTwoMaxLenght" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
                         );
                     }
                 }
             }
 
-            this.ColourTwoChancePercent = 0.75;
+            this.ColourTwoBiasFactor = 0.75;
 
-            if (config.ColourTwoChancePercent) {
-                if (config.ColourTwoChancePercent >= 0 && config.ColourTwoChancePercent <= 100) {
-                    this.ColourTwoChancePercent = config.ColourTwoChancePercent / 100;
+            if (config.ColourTwoBiasFactor) {
+                if (config.ColourTwoBiasFactor >= 0 && config.ColourTwoBiasFactor <= 100) {
+                    this.ColourTwoBiasFactor = config.ColourTwoBiasFactor / 100;
                 } else {
-                    throw new Error('"ColourTwoChancePercent" must be a number between 0-100');
+                    throw new Error('"ColourTwoBiasFactor" must be a number between 0-100');
                 }
             }
 
-            this.ColourOneMaxLenghtPercent = this.BattleFieldSize;
+            this.ColourOneMaxLenght = this.BattleFieldSize;
 
-            if (config.ColourOneMaxLenghtPercent) {
-                if (
-                    config.ColourOneMaxLenghtPercent.toString().substr(config.ColourOneMaxLenghtPercent.length - 1) ===
-                    '%'
-                ) {
+            if (config.ColourOneMaxLenght) {
+                if (config.ColourOneMaxLenght.toString().substr(config.ColourOneMaxLenght.length - 1) === '%') {
                     let percent: number = Number(
-                        config.ColourOneMaxLenghtPercent.toString().substr(
-                            0,
-                            config.ColourOneMaxLenghtPercent.length - 1
-                        )
+                        config.ColourOneMaxLenght.toString().substr(0, config.ColourOneMaxLenght.length - 1)
                     );
                     if (percent >= 0 && percent <= 100) {
-                        this.ColourOneMaxLenghtPercent = Math.ceil((this.BattleFieldSize / 100) * percent);
+                        this.ColourOneMaxLenght = Math.ceil((this.BattleFieldSize / 100) * percent);
                     } else {
-                        throw new Error('"ColourOneMaxLenghtPercent" must be a number between 0-100');
+                        throw new Error('"ColourOneMaxLenght" must be a number between 0-100');
                     }
                 } else {
-                    if (
-                        config.ColourOneMaxLenghtPercent >= 0 &&
-                        config.ColourOneMaxLenghtPercent <= this.BattleFieldSize
-                    ) {
-                        this.ColourOneMaxLenghtPercent = Math.ceil(config.ColourOneMaxLenghtPercent);
+                    if (config.ColourOneMaxLenght >= 0 && config.ColourOneMaxLenght <= this.BattleFieldSize) {
+                        this.ColourOneMaxLenght = Math.ceil(config.ColourOneMaxLenght);
                     } else {
                         throw new Error(
-                            '"ColourOneMaxLenghtPercent" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
+                            '"ColourOneMaxLenght" must be a number between 0 - <BattleFieldSize> or a percent (add %)'
                         );
                     }
                 }
             }
 
-            this.LastCellSingleChance = 0.5;
+            this.LastSingleCellBiasFactor = 0.5;
 
-            if (config.LastCellSingleChance) {
-                if (config.LastCellSingleChance >= 0 && config.LastCellSingleChance <= 100) {
-                    this.LastCellSingleChance = config.LastCellSingleChance / 100;
+            if (config.LastSingleCellBiasFactor) {
+                if (config.LastSingleCellBiasFactor >= 0 && config.LastSingleCellBiasFactor <= 100) {
+                    this.LastSingleCellBiasFactor = config.LastSingleCellBiasFactor / 100;
                 } else {
-                    throw new Error('"LastCellSingleChance" must be a number between 0-100');
+                    throw new Error('"LastSingleCellBiasFactor" must be a number between 0-100');
                 }
             }
 
@@ -180,7 +162,7 @@ export class ScatterMode implements IMode {
      * @param grid
      */
     private BattleOdd(grid: Grid): Grid {
-        let maxLenght: number = this.ColourOneMaxLenghtPercent || 0;
+        let maxLenght: number = this.ColourOneMaxLenght || 0;
 
         let flip: boolean = false;
         for (const row of grid.Cells) {
@@ -222,7 +204,7 @@ export class ScatterMode implements IMode {
      * @param grid
      */
     private BattleEven(grid: Grid): Grid {
-        let maxLenght: number = this.ColourTwoMaxLenghtPercent || 0;
+        let maxLenght: number = this.ColourTwoMaxLenght || 0;
 
         for (const row of grid.Cells) {
             if (IsOdd(row[0].Y)) continue;
@@ -265,7 +247,7 @@ export class ScatterMode implements IMode {
                 } else {
                     this.Random.Max = 1;
                     let battleOutcome: number = this.Random.Next();
-                    if (battleOutcome < this.ColourTwoChancePercent) {
+                    if (battleOutcome < this.ColourTwoBiasFactor) {
                         cell.Type = CellTypes.Victory;
                         pointCount += 1;
                     } else {
@@ -292,7 +274,7 @@ export class ScatterMode implements IMode {
                     row[this.BattleField.End - 2].Type === CellTypes.Defeat
                 ) {
                     this.Random.Max = 1;
-                    if (this.Random.Next() < this.LastCellSingleChance) {
+                    if (this.Random.Next() < this.LastSingleCellBiasFactor) {
                         row[this.BattleField.End - 1].Type = CellTypes.Defeat;
                     }
                 }
@@ -301,7 +283,7 @@ export class ScatterMode implements IMode {
                     row[this.BattleField.Start].Type === CellTypes.Defeat
                 ) {
                     this.Random.Max = 1;
-                    if (this.Random.Next() < this.LastCellSingleChance) {
+                    if (this.Random.Next() < this.LastSingleCellBiasFactor) {
                         row[this.BattleField.Start - 1].Type = CellTypes.Defeat;
                     }
                 }
