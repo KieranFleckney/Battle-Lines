@@ -6,11 +6,11 @@ import {
     SeedRand,
     IsCssGradient,
     CssGradientToCanvasGradientLinear,
-    AddColourStops,
     IsBrowser,
     IsNodejs,
     IsHexColour,
     DegToRad,
+    DrawGradient,
 } from '../Utilities/Utilities';
 import { CanvasRendererExportOptions } from './CanvasRendererExportOptions';
 
@@ -121,34 +121,9 @@ export class CanvasRenderer implements IRenderer {
                     this.Height
                 );
 
-                let gradient = ctx.createLinearGradient(
-                    gradientConfig.LinearGradientParameters.X0,
-                    gradientConfig.LinearGradientParameters.Y0,
-                    gradientConfig.LinearGradientParameters.X1,
-                    gradientConfig.LinearGradientParameters.Y1
-                );
-
-                gradient = AddColourStops(gradientConfig.ColourStops, gradient);
-
-                ctx.setTransform(
-                    gradientConfig.TransformMatrix.A,
-                    gradientConfig.TransformMatrix.B,
-                    gradientConfig.TransformMatrix.C,
-                    gradientConfig.TransformMatrix.D,
-                    gradientConfig.TransformMatrix.E,
-                    gradientConfig.TransformMatrix.F
-                );
-
                 ctx.globalCompositeOperation = 'source-in';
-                ctx.fillStyle = gradient;
-                ctx.fillRect(
-                    gradientConfig.DrawRectParameters.X,
-                    gradientConfig.DrawRectParameters.Y,
-                    gradientConfig.DrawRectParameters.Width,
-                    gradientConfig.DrawRectParameters.Height
-                );
-
-                ctx.setTransform(1, 0, 0, 1, 0, 0);
+                DrawGradient(ctx, gradientConfig);
+                ctx.globalCompositeOperation = 'source-out';
             }
         }
     }

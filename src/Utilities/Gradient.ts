@@ -284,6 +284,37 @@ export class RotateScaleGradient {
     }
 }
 
+export function DrawGradient(ctx: CanvasRenderingContext2D, gradientConfig: RotateScaleGradient): void {
+    let gradient = ctx.createLinearGradient(
+        gradientConfig.LinearGradientParameters.X0,
+        gradientConfig.LinearGradientParameters.Y0,
+        gradientConfig.LinearGradientParameters.X1,
+        gradientConfig.LinearGradientParameters.Y1
+    );
+
+    gradient = AddColourStops(gradientConfig.ColourStops, gradient);
+
+    ctx.setTransform(
+        gradientConfig.TransformMatrix.A,
+        gradientConfig.TransformMatrix.B,
+        gradientConfig.TransformMatrix.C,
+        gradientConfig.TransformMatrix.D,
+        gradientConfig.TransformMatrix.E,
+        gradientConfig.TransformMatrix.F
+    );
+
+    //ctx.globalCompositeOperation = 'source-in';
+    ctx.fillStyle = gradient;
+    ctx.fillRect(
+        gradientConfig.DrawRectParameters.X,
+        gradientConfig.DrawRectParameters.Y,
+        gradientConfig.DrawRectParameters.Width,
+        gradientConfig.DrawRectParameters.Height
+    );
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
 /**
  * Converts degree to radians
  * @param deg
