@@ -1,4 +1,4 @@
-export { IRLG, New } from './IRLG';
+export { BattleLines, New } from './BattleLines';
 export { Config } from './Config';
 
 export { IMode } from './Modes/IMode';

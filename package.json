@@ -1,5 +1,5 @@
 {
-    "name": "Irregular-Rounded-Line-Generator",
+    "name": "Battle-Lines",
     "version": "1.0.0",
     "description": "Creates abstract images in the form of irregular rounded lines",
     "main": "./dist-cjs/index.js",

@@ -4,14 +4,14 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 module.exports = {
     mode: 'production',
     entry: {
-        IRLG: './src/Index.ts',
-        'IRLG.min': './src/Index.ts',
+        BattleLines: './src/Index.ts',
+        'BattleLines.min': './src/Index.ts',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
         libraryTarget: 'umd',
-        library: 'IRLG',
+        library: 'BattleLines',
         umdNamedDefine: true,
     },
     resolve: {

@@ -5,7 +5,7 @@ import { IMode } from './Modes/IMode';
 import { SeedRand } from './Utilities/Utilities';
 import { TextRenderer } from './Renderers/TextRenderer';
 
-export class IRLG {
+export class BattleLines {
     Grid: Grid;
     private Renderer: IRenderer;
     private Mode: IMode;
@@ -104,7 +104,7 @@ export class IRLG {
 }
 
 // Added this for UMD bundle, don't look at me like that.
-export function New(config: Config): IRLG {
-    let newIRLG = new IRLG(config);
+export function New(config: Config): BattleLines {
+    let newIRLG = new BattleLines(config);
     return newIRLG;
 }
