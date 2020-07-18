@@ -356,8 +356,6 @@ export class PincerMode implements IMode {
                                 aboveRow[tripletsIndexToCheck].Type === CellTypes.Defeat &&
                                 bewlowRow[tripletsIndexToCheck].Type === CellTypes.Defeat
                             ) {
-                                console.log('triple Removed');
-                                console.log(row[tripletsIndexToCheck]);
                                 row[tripletsIndexToCheck].Type = CellTypes.Victory;
                             }
                         }
@@ -372,8 +370,6 @@ export class PincerMode implements IMode {
                     ) {
                         this.Random.Max = 1;
                         if (this.Random.Next() < this.LastCellSingleChance) {
-                            console.log('Single Removed');
-                            console.log(row[singleIndexToCheck]);
                             row[singleIndexToCheck].Type = CellTypes.Defeat;
                         }
                     }
