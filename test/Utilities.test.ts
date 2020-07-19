@@ -1,19 +1,5 @@
-import {
-    IsOdd,
-    IsHexColour,
-    IsCssGradient,
-    Rand,
-    SeedRand,
-    DegToRad,
-    RotateScaleGradient,
-    IsNumeric,
-} from '../src/Index';
-import {
-    ParseGrandientAngle,
-    ParseGrandientColours,
-    ColourStop,
-    CalculateRotateScale,
-} from '../src/Utilities/Gradient';
+import { IsOdd, IsHexColour, IsCssGradient, Rand, SeedRand, DegToRad, IsNumeric } from '../src/Index';
+import { ParseGrandientAngle, ParseGrandientColours, ColourStop } from '../src/Utilities/Gradient';
 
 describe('Utilities test', () => {
     describe('Validators', () => {
@@ -114,17 +100,17 @@ describe('Utilities test', () => {
             expect(parsedColours).toEqual(controlledColours);
         });
 
-        it('Calculate Rotation and Scale', () => {
-            let calculatedScaleRotation = CalculateRotateScale(180, 500, 500, 500, 500);
+        // it('Calculate Rotation and Scale', () => {
+        //     let calculatedScaleRotation = CalculateRotateScale(180, 500, 500, 500, 500);
 
-            expect(calculatedScaleRotation).toBeInstanceOf(RotateScaleGradient);
-            expect(calculatedScaleRotation.TransformMatrix.A).toEqual(-0.8376123159638887);
-            expect(calculatedScaleRotation.TransformMatrix.C).toEqual(1.1213034074504158);
-            expect(calculatedScaleRotation.LinearGradientParameters.X0).toEqual(-250);
-            expect(calculatedScaleRotation.LinearGradientParameters.Y1).toEqual(0);
-            expect(calculatedScaleRotation.DrawRectParameters.X).toEqual(-250);
-            expect(calculatedScaleRotation.ColourStops).toEqual([]);
-        });
+        //     expect(calculatedScaleRotation).toBeInstanceOf(RotateScaleGradient);
+        //     expect(calculatedScaleRotation.TransformMatrix.A).toEqual(-0.8376123159638887);
+        //     expect(calculatedScaleRotation.TransformMatrix.C).toEqual(1.1213034074504158);
+        //     expect(calculatedScaleRotation.LinearGradientParameters.X0).toEqual(-250);
+        //     expect(calculatedScaleRotation.LinearGradientParameters.Y1).toEqual(0);
+        //     expect(calculatedScaleRotation.DrawRectParameters.X).toEqual(-250);
+        //     expect(calculatedScaleRotation.ColourStops).toEqual([]);
+        // });
 
         it('Degree to Radians', () => {
             expect(DegToRad(90)).toEqual(1.5707963267948966);

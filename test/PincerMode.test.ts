@@ -31,14 +31,14 @@ describe('PincerMode test', () => {
             new PincerMode(randomConfig);
         }).toThrowError(Error);
 
-        let attackerSizeConfig = { BattleFieldSize: 20, Random: [0, 1] as any, AttackerSize: 'string' as any };
+        let attackerSizeConfig = { BattleFieldSize: 20, Random: [0, 1] as any, ColourOneSize: 'string' as any };
         expect(() => {
             new PincerMode(attackerSizeConfig);
         }).toThrowError(Error);
     });
 
     let random = new SeedRand(324363.1680802235);
-    let config = { BattleFieldSize: 10, Random: random, AttackerSize: 40 };
+    let config = { BattleFieldSize: 10, Random: random, ColourOneSize: 40 };
     let pincerMode = new PincerMode(config);
     let grid = new Grid(1718, 1287, 20);
     grid = pincerMode.Battle(grid);
