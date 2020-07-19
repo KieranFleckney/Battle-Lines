@@ -1,4 +1,4 @@
-export { Rand, SeedRand } from './Random';
+export { Rand, SeedRand } from './Random.js';
 export {
     CssGradientToCanvasGradientLinear,
     RotateScaleGradient,
@@ -8,5 +8,5 @@ export {
     AddColourStops,
     DrawGradient,
     DrawGradientToFit,
-} from './Gradient';
-export { IsHexColour, IsCssGradient, IsOdd, IsNodejs, IsBrowser, IsNumeric } from './Validators';
+} from './Gradient.js';
+export { IsHexColour, IsCssGradient, IsOdd, IsNodejs, IsBrowser, IsNumeric } from './Validators.js';
