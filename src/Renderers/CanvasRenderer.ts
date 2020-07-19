@@ -114,7 +114,7 @@ export class CanvasRenderer implements IRenderer {
                 );
 
                 ctx.globalCompositeOperation = 'source-in';
-                DrawGradient(ctx, gradientConfig);
+                DrawGradient(ctx, gradientConfig, 0, 0, this.Width, this.Height);
                 ctx.globalCompositeOperation = 'source-over';
             }
 
@@ -131,7 +131,7 @@ export class CanvasRenderer implements IRenderer {
                     this.Height
                 );
 
-                DrawGradient(ctx, gradientConfigTwo);
+                DrawGradient(ctx, gradientConfigTwo, 0, 0, this.Width, this.Height);
             } else {
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, this.Width, this.Height);

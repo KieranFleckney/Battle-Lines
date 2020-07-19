@@ -13,7 +13,7 @@ export function CssGradientToCanvasGradientLinear(
     gradientHeight: number,
     ParentWidth: number,
     parentHeight: number
-): RotateScaleGradient {
+): CanvasGradientParameters {
     if (!cssGradient) throw new Error('Missing "cssGradient"');
     if (!gradientWidth) throw new Error('Missing "gradientWidth"');
     if (!gradientHeight) throw new Error('Missing "gradientHeight"');
@@ -28,13 +28,15 @@ export function CssGradientToCanvasGradientLinear(
 
     if (typeof angle !== 'number') throw new Error("Couldn't calculate angle");
 
-    let rotateScaleGradient = CalculateRotateScale(angle, gradientWidth, gradientHeight, ParentWidth, parentHeight);
+    // let rotateScaleGradient = CalculateRotateScale(angle, gradientWidth, gradientHeight, ParentWidth, parentHeight);
+    let gradientParams = ScaleGradient(angle, gradientWidth, gradientHeight);
 
-    if (!rotateScaleGradient) throw new Error("Couldn't calculate rotations");
+    // if (!rotateScaleGradient) throw new Error("Couldn't calculate rotations");
+    if (!gradientParams) throw new Error("Couldn't calculate rotations");
 
-    rotateScaleGradient.ColourStops = colours;
+    // rotateScaleGradient.ColourStops = colours;gradient
 
-    return rotateScaleGradient;
+    return new CanvasGradientParameters(gradientParams, colours);
 }
 
 /**
@@ -191,7 +193,7 @@ export function CalculateRotateScale(
     let dy = Math.sin(angle) * scale;
 
     let transformParams = new TransformMatrix(dx, dy, -dy, dx, parentWidth / 2, parentHeight / 2);
-    let linearGradientParameters = new LinearGradientParameters(-imageWidth / 2, 0, imageWidth / 2, 0);
+    let linearGradientParameters = new LinearGradientParameters(imageWidth / 2, 0, -imageWidth / 2, 0);
     let drawRectParameters = new DrawRectParameters(-imageWidth / 2, -imageHeight / 2, imageWidth, imageHeight);
 
     let rotateScaleGradient = new RotateScaleGradient(
@@ -202,6 +204,20 @@ export function CalculateRotateScale(
     );
 
     return rotateScaleGradient;
+}
+// https://stackoverflow.com/questions/45624502/html5-canvas-rotate-gradient-around-centre
+export function ScaleGradient(angle: number, wdith: number, heigh: number): LinearGradientParameters {
+    const w = wdith;
+    const h = heigh;
+    const maxWidth = w / 2;
+    const aspect = h / w;
+    let linearGradientParameters = new LinearGradientParameters(
+        w / 2 + Math.cos(angle) * maxWidth,
+        h / 2 + Math.sin(angle) * maxWidth * aspect,
+        w / 2 - Math.cos(angle) * maxWidth,
+        h / 2 - Math.sin(angle) * maxWidth * aspect
+    );
+    return linearGradientParameters;
 }
 
 export class ColourStop {
@@ -284,7 +300,27 @@ export class RotateScaleGradient {
     }
 }
 
-export function DrawGradient(ctx: CanvasRenderingContext2D, gradientConfig: RotateScaleGradient): void {
+export class CanvasGradientParameters {
+    LinearGradientParameters: LinearGradientParameters;
+    ColourStops: Array<ColourStop>;
+
+    /**
+     * All value need to create canvas linear gradient/colours
+     * @param linearGradientParameters
+     * @param colourStops
+     */
+    constructor(linearGradientParameters: LinearGradientParameters, colourStops: Array<ColourStop>) {
+        this.LinearGradientParameters = linearGradientParameters;
+        this.ColourStops = colourStops;
+    }
+}
+
+/**
+ * Draws gradient using RotateScaleGradient which is gerenate using CalculateRotateScale
+ * @param ctx Canvas context
+ * @param gradientConfig RotateScaleGradient object
+ */
+export function DrawGradientToFit(ctx: CanvasRenderingContext2D, gradientConfig: RotateScaleGradient): void {
     let gradient = ctx.createLinearGradient(
         gradientConfig.LinearGradientParameters.X0,
         gradientConfig.LinearGradientParameters.Y0,
@@ -313,6 +349,37 @@ export function DrawGradient(ctx: CanvasRenderingContext2D, gradientConfig: Rota
     );
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
+}
+
+/**
+ * Draw gadient using CanvasGradientParameters
+ * @param ctx canvas context
+ * @param gradientConfig CanvasGradientParameters object
+ * @param x
+ * @param y
+ * @param width
+ * @param height
+ */
+export function DrawGradient(
+    ctx: CanvasRenderingContext2D,
+    gradientConfig: CanvasGradientParameters,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+): void {
+    let gradient = ctx.createLinearGradient(
+        gradientConfig.LinearGradientParameters.X0,
+        gradientConfig.LinearGradientParameters.Y0,
+        gradientConfig.LinearGradientParameters.X1,
+        gradientConfig.LinearGradientParameters.Y1
+    );
+
+    gradient = AddColourStops(gradientConfig.ColourStops, gradient);
+
+    //ctx.globalCompositeOperation = 'source-in';
+    ctx.fillStyle = gradient;
+    ctx.fillRect(x, y, width, height);
 }
 
 /**
