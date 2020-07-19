@@ -20,7 +20,6 @@
     "devDependencies": {
         "@types/jasmine": "^3.5.11",
         "@types/node": "^14.0.14",
-        "awesome-typescript-loader": "^5.2.1",
         "karma": "^5.1.0",
         "karma-chrome-launcher": "^3.1.0",
         "karma-cli": "^2.0.0",
@@ -29,6 +28,8 @@
         "karma-summary-reporter": "^1.8.0",
         "karma-webpack": "^4.0.2",
         "shx": "^0.3.2",
+        "ts-loader": "^8.0.1",
+        "tsutils": "^3.17.1",
         "typescript": "^3.9.5",
         "uglifyjs-webpack-plugin": "^2.2.0",
         "webpack": "^4.43.0",
