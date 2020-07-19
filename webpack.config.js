@@ -46,6 +46,12 @@ module.exports = {
         BattleLines: './src/Index.ts',
         'BattleLines.min': './src/Index.ts',
     },
+    node: {
+        Buffer: false,
+        global: false,
+        __filename: false,
+        __dirname: false,
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
