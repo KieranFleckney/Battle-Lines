@@ -297,7 +297,7 @@ export class CanvasRenderer implements IRenderer {
                 if (IsNodejs()) {
                     let dataUrl = this.DataUrl();
                     let data = dataUrl.replace(/^data:image\/\w+;base64,/, '');
-                    return new Buffer(data, 'base64');
+                    return Buffer.from(data, 'base64');
                 } else {
                     throw new Error('Not in Nodejs');
                 }
