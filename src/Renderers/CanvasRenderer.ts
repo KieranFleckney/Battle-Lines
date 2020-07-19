@@ -63,14 +63,6 @@ export class CanvasRenderer implements IRenderer {
         if (ctx) {
             ctx.clearRect(0, 0, this.Width, this.Height);
 
-            if (IsHexColour(this.ColourTwo)) {
-                this.Canvas.style.backgroundColor = this.ColourTwo;
-            } else if (IsCssGradient(this.ColourTwo)) {
-                this.Canvas.style.backgroundImage = 'linear-gradient(' + this.ColourTwo + ')';
-            } else {
-                this.Canvas.style.backgroundColor = '#ffffff';
-            }
-
             let isGradient = IsCssGradient(this.ColourOne);
             if (IsHexColour(this.ColourOne)) {
                 ctx.fillStyle = this.ColourOne;
@@ -123,8 +115,28 @@ export class CanvasRenderer implements IRenderer {
 
                 ctx.globalCompositeOperation = 'source-in';
                 DrawGradient(ctx, gradientConfig);
-                ctx.globalCompositeOperation = 'source-out';
+                ctx.globalCompositeOperation = 'source-over';
             }
+
+            ctx.globalCompositeOperation = 'destination-over';
+            if (IsHexColour(this.ColourTwo)) {
+                ctx.fillStyle = this.ColourTwo;
+                ctx.fillRect(0, 0, this.Width, this.Height);
+            } else if (IsCssGradient(this.ColourTwo)) {
+                let gradientConfigTwo = CssGradientToCanvasGradientLinear(
+                    this.ColourTwo,
+                    this.Width,
+                    this.Height,
+                    this.Width,
+                    this.Height
+                );
+
+                DrawGradient(ctx, gradientConfigTwo);
+            } else {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, this.Width, this.Height);
+            }
+            ctx.globalCompositeOperation = 'source-over';
         }
     }
 
