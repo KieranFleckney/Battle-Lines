@@ -1,4 +1,4 @@
-import { Grid } from '../Grid/Grid';
+import { Grid } from '../Grid/Grid.js';
 
 export interface IMode {
     Battle(grid: Grid, args?: any): Grid;

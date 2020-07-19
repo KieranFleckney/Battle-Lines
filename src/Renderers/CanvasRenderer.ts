@@ -1,6 +1,6 @@
-import { IRenderer } from './IRenderer';
-import { Cell } from '../Grid/Cell';
-import { CellTypes } from '../Grid/Cell-Types';
+import { IRenderer } from './IRenderer.js';
+import { Cell } from '../Grid/Cell.js';
+import { CellTypes } from '../Grid/Cell-Types.js';
 import {
     IsOdd,
     SeedRand,
@@ -11,8 +11,8 @@ import {
     IsHexColour,
     DegToRad,
     DrawGradient,
-} from '../Utilities/Utilities';
-import { CanvasRendererExportOptions } from './CanvasRendererExportOptions';
+} from '../Utilities/Utilities.js';
+import { CanvasRendererExportOptions } from './CanvasRendererExportOptions.js';
 
 export class CanvasRenderer implements IRenderer {
     Random: SeedRand;

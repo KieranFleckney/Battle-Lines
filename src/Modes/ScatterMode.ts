@@ -1,9 +1,9 @@
-import { SeedRand, IsOdd, IsNumeric } from '../Utilities/Utilities';
-import { Grid } from '../Grid/Grid';
-import { BattleField } from './BattleField';
-import { Cell } from '../Grid/Cell';
-import { CellTypes } from '../Grid/Cell-Types';
-import { IMode } from './IMode';
+import { SeedRand, IsOdd, IsNumeric } from '../Utilities/Utilities.js';
+import { Grid } from '../Grid/Grid.js';
+import { BattleField } from './BattleField.js';
+import { Cell } from '../Grid/Cell.js';
+import { CellTypes } from '../Grid/Cell-Types.js';
+import { IMode } from './IMode.js';
 
 export class ScatterMode implements IMode {
     Random: SeedRand;

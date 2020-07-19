@@ -1,9 +1,9 @@
-import { Config } from './Config';
-import { Grid } from './Grid/Grid';
-import { IRenderer } from './Renderers/IRenderer';
-import { IMode } from './Modes/IMode';
-import { SeedRand } from './Utilities/Utilities';
-import { TextRenderer } from './Renderers/TextRenderer';
+import { Config } from './Config.js';
+import { Grid } from './Grid/Grid.js';
+import { IRenderer } from './Renderers/IRenderer.js';
+import { IMode } from './Modes/IMode.js';
+import { SeedRand } from './Utilities/Utilities.js';
+import { TextRenderer } from './Renderers/TextRenderer.js';
 
 export class BattleLines {
     Grid: Grid;

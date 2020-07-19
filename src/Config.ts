@@ -1,5 +1,5 @@
-import { IModeConstructor } from './Modes/IMode';
-import { IRendererConstructor } from './Renderers/IRenderer';
+import { IModeConstructor } from './Modes/IMode.js';
+import { IRendererConstructor } from './Renderers/IRenderer.js';
 
 export class Config {
     Width: number;

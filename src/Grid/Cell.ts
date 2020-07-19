@@ -1,4 +1,4 @@
-import { CellTypes } from './Cell-Types';
+import { CellTypes } from './Cell-Types.js';
 
 export class Cell {
     X: number;

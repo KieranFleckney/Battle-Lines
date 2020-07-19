@@ -1,6 +1,6 @@
-import { IRenderer } from './IRenderer';
-import { Cell } from '../Grid/Cell';
-import { CellTypes } from '../Grid/Cell-Types';
+import { IRenderer } from './IRenderer.js';
+import { Cell } from '../Grid/Cell.js';
+import { CellTypes } from '../Grid/Cell-Types.js';
 
 export class TextRenderer implements IRenderer {
     /**
