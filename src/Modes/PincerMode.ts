@@ -247,13 +247,15 @@ export class PincerMode implements IMode {
             for (const row of grid.Cells) {
                 if (IsOdd(row[0].Y)) continue;
                 let cells: Array<Cell> = row.filter((cell) => this.IsInBattle(cell.X, battleField));
-                let aboveRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y + 1);
-                let bewlowRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y - 1);
+                let aboveRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y - 1);
+                let bewlowRow: Array<Cell> | undefined = grid.Cells.find((c) => c[0].Y === row[0].Y + 1);
                 let pointCount: number = 0;
+                let lastRow: boolean = false;
 
-                if (!aboveRow && !bewlowRow) {
-                    continue;
-                }
+                if (grid.Rows === row[0].Y) lastRow = true;
+
+                if (!aboveRow) continue;
+                if (!lastRow && !bewlowRow) continue;
 
                 if (battleFieldCount === 1) cells.reverse();
 
@@ -264,9 +266,11 @@ export class PincerMode implements IMode {
                     cellsToCheck.push(aboveRow?.[cell.X - 1]);
                     cellsToCheck.push(aboveRow?.[cell.X]);
                     cellsToCheck.push(aboveRow?.[cell.X - 2]);
-                    cellsToCheck.push(bewlowRow?.[cell.X - 1]);
-                    cellsToCheck.push(bewlowRow?.[cell.X]);
-                    cellsToCheck.push(bewlowRow?.[cell.X - 2]);
+                    if (!lastRow) {
+                        cellsToCheck.push(bewlowRow?.[cell.X - 1]);
+                        cellsToCheck.push(bewlowRow?.[cell.X]);
+                        cellsToCheck.push(bewlowRow?.[cell.X - 2]);
+                    }
 
                     for (const cellCheck of cellsToCheck) {
                         if (cellCheck?.Type !== CellTypes.Victory) {
