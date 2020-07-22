@@ -28,11 +28,12 @@ I use a very similar commit message guidelines as angular. This help to make loo
 Commit Message Format
 Each commit message consists of a header, a body and a footer. The header has a special format that includes a type and subject.
 
-<type>: <subject>
-<BLANK LINE>
-<body>
-<BLANK LINE>
-<footer>
+&lt;type&gt;: &lt;subject&gt;
+&lt;BLANK LINE&gt;
+&lt;body&gt;
+&lt;BLANK LINE&gt;
+&lt;footer&gt;
+
 
 The header is mandatory.
 
@@ -45,7 +46,7 @@ The footer should contain a closing reference to an issue if any.
 fix: incorrect config name
 
 **Revert**
-If the commit reverts a previous commit, it should begin with revert: , followed by the header of the reverted commit. In the body it should say: This reverts commit <hash>., where the hash is the SHA of the commit being reverted.
+If the commit reverts a previous commit, it should begin with revert: , followed by the header of the reverted commit. In the body it should say: This reverts commit &lt;hash&gt;,where the hash is the SHA of the commit being reverted.
 
 **Type**
 Must be one of the following:
