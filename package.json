@@ -4,6 +4,11 @@
     "description": "Creates abstract images in the form of irregular rounded lines",
     "main": "./dist-cjs/index.js",
     "module": "./dist-esm/index.js",
+    "type": "module",
+    "exports": {
+        ".": "./dist-cjs/index.js",
+        "./module": "./dist-esm/index.js"
+    },
     "author": "Kieran Fleckney",
     "license": "MIT",
     "keywords": [
