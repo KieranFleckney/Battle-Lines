@@ -61,7 +61,7 @@ export class CanvasRenderer implements IRenderer {
 
         let ctx: CanvasRenderingContext2D | null = this.Canvas.getContext('2d');
         if (ctx) {
-            ctx.clearRect(0, 0, this.Width, this.Height);
+            ctx.clearRect(0, 0, this.Canvas.width, this.Canvas.height);
 
             let isGradient = IsCssGradient(this.ColourOne);
             if (IsHexColour(this.ColourOne)) {
@@ -107,34 +107,34 @@ export class CanvasRenderer implements IRenderer {
             if (isGradient) {
                 let gradientConfig = CssGradientToCanvasGradientLinear(
                     this.ColourOne,
-                    this.Width,
-                    this.Height,
-                    this.Width,
-                    this.Height
+                    this.Canvas.width,
+                    this.Canvas.height,
+                    this.Canvas.width,
+                    this.Canvas.height
                 );
 
                 ctx.globalCompositeOperation = 'source-in';
-                DrawGradient(ctx, gradientConfig, 0, 0, this.Width, this.Height);
+                DrawGradient(ctx, gradientConfig, 0, 0, this.Canvas.width, this.Canvas.height);
                 ctx.globalCompositeOperation = 'source-over';
             }
 
             ctx.globalCompositeOperation = 'destination-over';
             if (IsHexColour(this.ColourTwo)) {
                 ctx.fillStyle = this.ColourTwo;
-                ctx.fillRect(0, 0, this.Width, this.Height);
+                ctx.fillRect(0, 0, this.Canvas.width, this.Canvas.height);
             } else if (IsCssGradient(this.ColourTwo)) {
                 let gradientConfigTwo = CssGradientToCanvasGradientLinear(
                     this.ColourTwo,
-                    this.Width,
-                    this.Height,
-                    this.Width,
-                    this.Height
+                    this.Canvas.width,
+                    this.Canvas.height,
+                    this.Canvas.width,
+                    this.Canvas.height
                 );
 
-                DrawGradient(ctx, gradientConfigTwo, 0, 0, this.Width, this.Height);
+                DrawGradient(ctx, gradientConfigTwo, 0, 0, this.Canvas.width, this.Canvas.height);
             } else {
                 ctx.fillStyle = '#ffffff';
-                ctx.fillRect(0, 0, this.Width, this.Height);
+                ctx.fillRect(0, 0, this.Canvas.width, this.Canvas.height);
             }
             ctx.globalCompositeOperation = 'source-over';
         }
