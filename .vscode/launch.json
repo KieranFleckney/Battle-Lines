@@ -8,9 +8,9 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/Test.js",
+            "program": "${workspaceFolder}/test/Test.js",
             "preLaunchTask": "tsc: build - tsconfig.json",
-            "outFiles": ["${workspaceFolder}/*.js"],
+            "outFiles": ["${workspaceFolder}/test/*.js"],
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart"
         }

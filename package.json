@@ -1,24 +1,50 @@
 {
-    "name": "Irregular-Rounded-Line-Generator",
+    "name": "battle-lines",
     "version": "1.0.0",
     "description": "Creates abstract images in the form of irregular rounded lines",
     "main": "./dist-cjs/index.js",
     "module": "./dist-esm/index.js",
     "author": "Kieran Fleckney",
     "license": "MIT",
-    "private": true,
+    "keywords": [
+        "abstract",
+        "irregular",
+        "rounded",
+        "lines",
+        "rounded lines",
+        "generater"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/KieranFleckney/Battle-Lines"
+    },
+    "files": [
+        "dist-cjs",
+        "dist-esm"
+    ],
     "scripts": {
-        "test": "node ./test.js",
-        "build": "npm run clean && npm run buildNode && npm run buildEsm && npm run buildBundle",
-        "buildEsm": "tsc -m es6 --outDir dist-esm",
-        "buildNode": "tsc",
-        "buildBundle": "webpack",
-        "clean": "shx rm -rf dist dist-esm dist-cjs",
-        "buildTest": "npm run build && npm run test"
+        "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:bundle",
+        "build:esm": "npx tsc -m es6 --outDir dist-esm",
+        "build:cjs": "npx tsc",
+        "build:bundle": "npx webpack",
+        "clean": "npx shx rm -rf dist dist-esm dist-cjs",
+        "tsc": "npx tsc",
+        "tsc:w": "npx tsc -watch",
+        "test": "karma start karma.conf.js"
     },
     "devDependencies": {
-        "awesome-typescript-loader": "^5.2.1",
+        "@types/jasmine": "^3.5.11",
+        "@types/node": "^14.0.14",
+        "karma": "^5.1.0",
+        "karma-chrome-launcher": "^3.1.0",
+        "karma-cli": "^2.0.0",
+        "karma-jasmine": "^3.3.1",
+        "karma-spec-reporter": "0.0.32",
+        "karma-summary-reporter": "^1.8.0",
+        "karma-webpack": "^4.0.2",
         "shx": "^0.3.2",
+        "ts-loader": "^8.0.1",
+        "tsutils": "^3.17.1",
         "typescript": "^3.9.5",
         "uglifyjs-webpack-plugin": "^2.2.0",
         "webpack": "^4.43.0",

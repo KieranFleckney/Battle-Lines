@@ -1,17 +1,62 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const ts = require('typescript');
+const { isImportDeclaration, isExportDeclaration, isStringLiteral } = require('tsutils/typeguard/node');
+
+function getCustomTransformers() {
+    return { before: [stripJsExt] };
+
+    function stripJsExt(context) {
+        return (sourceFile) => visitNode(sourceFile);
+
+        function visitNode(node) {
+            if (
+                (isImportDeclaration(node) || isExportDeclaration(node)) &&
+                node.moduleSpecifier &&
+                isStringLiteral(node.moduleSpecifier)
+            ) {
+                const targetModule = node.moduleSpecifier.text;
+                if (targetModule.endsWith('.js')) {
+                    const newTarget = targetModule.slice(0, targetModule.length - 3);
+                    return isImportDeclaration(node)
+                        ? ts.updateImportDeclaration(
+                              node,
+                              node.decorators,
+                              node.modifiers,
+                              node.importClause,
+                              ts.createLiteral(newTarget)
+                          )
+                        : ts.updateExportDeclaration(
+                              node,
+                              node.decorators,
+                              node.modifiers,
+                              node.exportClause,
+                              ts.createLiteral(newTarget)
+                          );
+                }
+            }
+            return ts.visitEachChild(node, visitNode, context);
+        }
+    }
+}
 
 module.exports = {
     mode: 'production',
     entry: {
-        IRLG: './src/Index.ts',
-        'IRLG.min': './src/Index.ts',
+        BattleLines: './src/Index.ts',
+        'BattleLines.min': './src/Index.ts',
+    },
+    node: {
+        Buffer: false,
+        global: false,
+        __filename: false,
+        __dirname: false,
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
         libraryTarget: 'umd',
-        library: 'IRLG',
+        library: 'BattleLines',
         umdNamedDefine: true,
     },
     resolve: {
@@ -30,11 +75,9 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: 'awesome-typescript-loader',
+                loader: 'ts-loader',
                 exclude: /node_modules/,
-                query: {
-                    declaration: false,
-                },
+                options: { compilerOptions: { declaration: false }, getCustomTransformers },
             },
         ],
     },
