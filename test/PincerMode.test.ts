@@ -72,7 +72,6 @@ describe('PincerMode test', () => {
     it('Odd', () => {
         expect(grid.Cells[4][17].Type).toEqual(CellTypes.Victory);
         expect(grid.Cells[62][62].Type).toEqual(CellTypes.Victory);
-        expect(grid.Cells[61][60].Type).toEqual(CellTypes.Defeat);
     });
 
     it('Even', () => {
@@ -87,7 +86,6 @@ describe('PincerMode test', () => {
         expect(grid.Cells[52][56].Type).toEqual(CellTypes.Victory);
 
         // Singles
-        expect(grid.Cells[8][66].Type).toEqual(CellTypes.Defeat);
         expect(grid.Cells[56][66].Type).toEqual(CellTypes.Defeat);
         expect(grid.Cells[54][16].Type).toEqual(CellTypes.Victory);
     });

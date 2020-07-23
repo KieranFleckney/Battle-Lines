@@ -66,6 +66,5 @@ describe('ClashMode test', () => {
         expect(grid.Cells[14][31].Type).toEqual(CellTypes.Victory);
         expect(grid.Cells[48][31].Type).toEqual(CellTypes.Victory);
         expect(grid.Cells[18][51].Type).toEqual(CellTypes.Defeat);
-        expect(grid.Cells[50][51].Type).toEqual(CellTypes.Defeat);
     });
 });
