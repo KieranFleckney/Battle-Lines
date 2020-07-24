@@ -5,7 +5,7 @@ Battle-Lines is a library for generating abstract images in the form of irregula
 # Content
 [📦 Getting Battle-Lines](#getting-battle-lines)  
 [🏎 Quickstart](#quickstart)  
-[〽️ Modes](#modes) 
+[〽️ Modes](#modes)  
 [🧰 API/Config](#api--configuration)  
 [🛠 Custom Modes & Renderer](#custom-mode--renderer)  
 [🧾 License](#license)  
@@ -34,7 +34,7 @@ or download the bundle (minified):
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 let canvas = document.getElementById('canvas');
-                battleline = new BattleLines.New(
+                battleline = BattleLines.New(
                     new BattleLines.Config(
                         canvas.width,
                         canvas.height,
@@ -60,7 +60,7 @@ or download the bundle (minified):
 **ES6**
 ```js
 <script type="module">
-            import * as bl from './scripts/Battle-Lines/index.js';
+            import * as bl from './node_modules/battle-lines/dist-esm/index.js';
             document.addEventListener('DOMContentLoaded', function () {
                 let canvas = document.getElementById('canvas');
                 let battleline = new bl.BattleLines(
@@ -89,21 +89,21 @@ or download the bundle (minified):
 Need the node-canvas package to use this via Node.
 ```js
 const fs = require('fs');
-const BattleLines = require('Battle-Lines');
+const bl = require('Battle-Lines');
 const { createCanvas } = require('canvas');
 
 const canvas = createCanvas(1000, 500);
 
-let battlelines = new BattleLines.BattleLines(
-    new BattleLines.Config(
+let battlelines = new bl.BattleLines(
+    new bl.Config(
         canvas.width,
         canvas.height,
         20,
-        BattleLines.ClashMode,
+        bl.ClashMode,
         {
             BattleFieldSize: 20,
         },
-        BattleLines.CanvasRenderer,
+        bl.CanvasRenderer,
         {
             Canvas: canvas,
             ColourOne: '#ff0000',
@@ -112,11 +112,11 @@ let battlelines = new BattleLines.BattleLines(
     )
 );
 battlelines.Next();
-let buffer = battlelines.Export(BattleLines.CanvasRendererExportOptions.NodeJs);
+let buffer = battlelines.Export(bl.CanvasRendererExportOptions.NodeJs);
 fs.writeFileSync('image.png', buffer);
 ```
 # Modes
-There are three modes/patterns which you can use by default. They have separate configs so you can adjust how they are generated. Images below show the default settings. **!!! LINK TO DOCS**
+There are three modes/patterns which you can use by default. They have separate configs so you can adjust how they are generated. Images below show the default settings. [Docs](https://github.com/KieranFleckney/Battle-Lines/wiki)
 
 **ClashMode**
 ![](https://i.imgur.com/SMXPDnh.png)
@@ -126,12 +126,12 @@ There are three modes/patterns which you can use by default. They have separate 
 ![](https://i.imgur.com/5GqC7LY.png)
 # API & Configuration
 **Api**  
-Please find the documentation for the api [here](!!!!)
+Please find the documentation for the api [here](https://github.com/KieranFleckney/Battle-Lines/wiki/API)
 
 **Configuration**  
-Please find the documentation for the different configuration options for both Modes and Renderers [here](!!!!)
+Please find the documentation for the different configuration options for both Modes and Renderers [here](https://github.com/KieranFleckney/Battle-Lines/wiki/Config)
 # Custom Mode & Renderer
-If the built in modes or renderers aren't to your liking you create your own. This is done by simply passing your own function in the config.  Please refer to the [docs](!) for information on creating your own Modes and Renderers. There is options for both Typescript and Javascript.
+If the built in modes or renderers aren't to your liking you create your own. This is done by simply passing your own function in the config.  Please refer to the [docs](https://github.com/KieranFleckney/Battle-Lines/wiki) for information on creating your own Modes and Renderers. There is options for both Typescript and Javascript.
 # License
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/KieranFleckney/Battle-Lines/blob/master/LICENSE) file for details
 
