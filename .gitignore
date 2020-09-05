@@ -45,6 +45,7 @@ dist/*
 dist-cjs/*
 dist-esm/*
 ref imgs/*
+testing/*
 
 # Dependency directories
 node_modules/
@@ -143,3 +144,4 @@ dist
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,node,yarn
+

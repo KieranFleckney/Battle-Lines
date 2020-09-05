@@ -127,6 +127,8 @@ export class PincerMode implements IMode {
      */
     Battle(grid: Grid): Grid {
         this.AttackerCamp = this.CalculateBattleField(grid.Columns / 2, this.ColourOneSize);
+        // This has to be done as it keeps duplicating the battlefield, there are smarter way of doing this but...
+        this.BattleField = new Array<BattleField>();
         this.BattleField.push(this.CalculateBattleField(this.AttackerCamp.Start, this.BattleFieldSize));
         this.BattleField.push(this.CalculateBattleField(this.AttackerCamp.End, this.BattleFieldSize));
         grid = this.GenerateAttackers(grid);
